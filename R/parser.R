@@ -23,7 +23,7 @@ collector_find <- function(name) {
     return(col_character())
   }
 
-  get(paste0("col_", name), envir = asNamespace("readr"))()
+  get(paste0("col_", name), envir = asNamespace("minty"))()
 }
 
 #' Parse a character vector.

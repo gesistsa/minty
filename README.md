@@ -9,17 +9,21 @@
 
 `minty` (**Min**imal **TY**pe Inferencing and Parsing Tools) is an
 experimental package to spin off the type inferencing and parsing tools
-(the so-called first edition parsing engine) from `readr` (see this
-issue
-[tidyverse/readr\#1517](https://github.com/tidyverse/readr/issues/1517)
-and the explanation on
-[editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
+(the so-called 1e parsing engine) from `readr` (see this issue
+[tidyverse/readr\#1517](https://github.com/tidyverse/readr/issues/1517)).
 Since July 2021, these tools are not used internally by `readr` for
-parsing text files. Now by `vroom`.
+parsing text files. Now `vroom` is used by default, unless explicitly
+call the first edition parsing engine (see the explanation on
+[editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
 
-`readr`’s type inferencing and parsing tools are used by various R
-packages, e.g. `readODS` and `surveytoolbox`, but those packages do not
-use the main functions (e.g. `readr::read_delim()`) of `readr`.
+`readr`’s 1e type inferencing and parsing tools are used by various R
+packages, e.g. `readODS` and `surveytoolbox`, but ironically those
+packages do not use the main functions (e.g. `readr::read_delim()`) of
+`readr`. As explained in the README of `readr`, those 1e code will be
+eventually removed from `readr`.
+
+`minty` aims at providing a set of minimal, long-term, and compatible
+type inferencing and parsing tools for those packages.
 
 ## Installation
 
