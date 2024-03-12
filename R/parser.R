@@ -7,7 +7,6 @@
 #' @useDynLib minty, .registration = TRUE
 NULL
 
-
 collector <- function(type, ...) {
   structure(list(...), class = c(paste0("collector_", type), "collector"))
 }
@@ -46,7 +45,8 @@ parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale
     collector <- collector_find(collector)
   }
 
-  warn_problems(parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws))
+  ##  warn_problems(parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws))
+  parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws)
 }
 
 #' Parse logicals, integers, and reals
@@ -489,6 +489,9 @@ locale <- function(date_names = "en",
     date_names <- date_names_lang(date_names)
   }
   stopifnot(is.date_names(date_names))
+  if (asciify && !requireNamespace("stringi", quietly = TRUE)) {
+      asciify <- FALSE
+  }
   if (asciify) {
     date_names[] <- lapply(date_names, stringi::stri_trans_general, id = "latin-ascii")
   }
@@ -720,7 +723,7 @@ cat_wrap <- function(header, body) {
 #' t3$cols <- c(t1$cols, t2$cols)
 #' t3
 cols <- function(..., .default = col_guess()) {
-  if (edition_first()) {
+  ## if (edition_first()) {
     col_types <- list(...)
     is_character <- vapply(col_types, is.character, logical(1))
     col_types[is_character] <- lapply(col_types[is_character], col_concise)
@@ -731,8 +734,8 @@ cols <- function(..., .default = col_guess()) {
 
     return(col_spec(col_types, .default))
   }
-  vroom::cols(..., .default = .default)
-}
+  ## vroom::cols(..., .default = .default)
+## }
 
 #' @export
 #' @rdname cols
@@ -1035,11 +1038,11 @@ str.col_spec <- function(object, ..., indent.str = "") {
 #' @return A col_spec object.
 #' @export
 #' @examples
-#' df <- read_csv(readr_example("mtcars.csv"))
-#' s <- spec(df)
-#' s
+#' ##df <- read_csv(readr_example("mtcars.csv"))
+#' ##s <- spec(df)
+#' ##s
 #'
-#' cols_condense(s)
+#' ##cols_condense(s)
 spec <- function(x) {
   stopifnot(inherits(x, "tbl_df"))
   attr(x, "spec")
@@ -1285,6 +1288,24 @@ deparse2 <- function(expr, ..., sep = "\n") {
 }
 
 is_syntactic <- function(x) make.names(x) == x
+
+
+is_named <- function(x) {
+  nms <- names(x)
+
+  if (is.null(nms)) {
+    return(FALSE)
+  }
+
+  all(nms != "" & !is.na(nms))
+}
+
+utctime <- function(year, month, day, hour, min, sec, psec) {
+  utctime_(
+    as.integer(year), as.integer(month), as.integer(day),
+    as.integer(hour), as.integer(min), as.integer(sec), as.numeric(psec)
+  )
+}
 
 ## data symbol creation
 

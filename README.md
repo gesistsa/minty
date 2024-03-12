@@ -15,11 +15,11 @@ issue
 and the explanation on
 [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
 Since July 2021, these tools are not used internally by `readr` for
-parsing text files (now by `vroom`).
+parsing text files. Now by `vroom`.
 
-Those type inferencing and parsing tools are used by various R packages,
-e.g. `readODS` and `surveytoolbox`, but those packages do not use the
-main functions (e.g. `readr::read_delim()`) of `readr`.
+`readr`’s type inferencing and parsing tools are used by various R
+packages, e.g. `readODS` and `surveytoolbox`, but those packages do not
+use the main functions (e.g. `readr::read_delim()`) of `readr`.
 
 ## Installation
 
@@ -54,10 +54,14 @@ Inferencing the column types
 library(minty)
 data <- type_convert(text_only)
 #> Registered S3 methods overwritten by 'readr':
-#>   method           from 
-#>   print.collector  minty
-#>   print.date_names minty
-#>   print.locale     minty
+#>   method                from 
+#>   as.character.col_spec minty
+#>   format.col_spec       minty
+#>   print.col_spec        minty
+#>   print.collector       minty
+#>   print.date_names      minty
+#>   print.locale          minty
+#>   str.col_spec          minty
 #> 
 #> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
