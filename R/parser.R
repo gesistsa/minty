@@ -4,6 +4,10 @@
 
 ## MIT See copyright file: https://github.com/tidyverse/readr/blob/main/LICENSE
 
+#' @useDynLib minty, .registration = TRUE
+NULL
+
+
 collector <- function(type, ...) {
   structure(list(...), class = c(paste0("collector_", type), "collector"))
 }

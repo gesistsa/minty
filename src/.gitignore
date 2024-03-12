@@ -1,0 +1,5 @@
+readr.so.dSYM
+readr.dll
+*.o
+*.so
+*.dll
