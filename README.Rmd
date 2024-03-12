@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-`minty` (*min*imal *ty*pe inferencing) is an experimental package to extract the type inferencing tools from `readr` (see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)).
+`minty` (**Min**imal **TY**pe Inferencing and Parsing Tools) is an experimental package to spin off the type inferencing and parsing tools (the so-called first edition parsing engine) from `readr` (see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517) and the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)). Since July 2021, these tools are not used internally by `readr` for parsing text files (now by `vroom`).
 
-The goal of this package is to be the drop-in replacement of `readr::type_convert()` and the [so-called "readr v1" parsing engine](https://github.com/tidyverse/readr?tab=readme-ov-file#editions).
+Those type inferencing and parsing tools are used by various R packages, e.g. `readODS` and `surveytoolbox`, but those packages do not use the main functions (e.g. `readr::read_delim()`) of `readr`.
 
 ## Installation
 
@@ -32,3 +32,25 @@ You can install the development version of minty like so:
 
 ## Example
 
+A character-only data.frame
+
+```{r}
+text_only <- data.frame(maybe_age = c("17", "18", "20"),
+                        maybe_male = c("true", "false", "true"),
+                        maybe_name = c("AA", "BB", "CC"),
+                        some_na = c("NA", "Not good", "Bad"),
+                        dob = c("2019/07/21", "2019/08/31", "2019/10/01"))
+str(text_only)
+```
+
+Inferencing the column types
+
+```{r}
+library(minty)
+data <- type_convert(text_only)
+data
+```
+
+```{r}
+str(data)
+```

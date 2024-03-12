@@ -65,7 +65,8 @@ type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
     guessed_types = guesses
   )
 
-  if (is.null(col_types) && !is_testing()) {
+  ## if (is.null(col_types) && !is_testing()) {
+  if (is.null(col_types)) {
     show_cols_spec(specs)
   }
 
