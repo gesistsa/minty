@@ -1,3 +1,9 @@
+## Ported from
+## https://github.com/tidyverse/readr/blob/main/R/collectors.R
+## https://github.com/tidyverse/readr/blob/main/R/locale.R
+
+## MIT See copyright file: https://github.com/tidyverse/readr/blob/main/LICENSE
+
 collector <- function(type, ...) {
   structure(list(...), class = c(paste0("collector_", type), "collector"))
 }
@@ -426,3 +432,268 @@ col_date <- function(format = "") {
 col_time <- function(format = "") {
   collector("time", format = format)
 }
+
+## Locale
+
+#' Create locales
+#'
+#' A locale object tries to capture all the defaults that can vary between
+#' countries. You set the locale in once, and the details are automatically
+#' passed on down to the columns parsers. The defaults have been chosen to
+#' match R (i.e. US English) as closely as possible. See
+#' `vignette("locales")` for more details.
+#'
+#' @param date_names Character representations of day and month names. Either
+#'   the language code as string (passed on to [date_names_lang()])
+#'   or an object created by [date_names()].
+#' @param date_format,time_format Default date and time formats.
+#' @param decimal_mark,grouping_mark Symbols used to indicate the decimal
+#'   place, and to chunk larger numbers. Decimal mark can only be `,` or
+#'   `.`.
+#' @param tz Default tz. This is used both for input (if the time zone isn't
+#'   present in individual strings), and for output (to control the default
+#'   display). The default is to use "UTC", a time zone that does not use
+#'   daylight savings time (DST) and hence is typically most useful for data.
+#'   The absence of time zones makes it approximately 50x faster to generate
+#'   UTC times than any other time zone.
+#'
+#'   Use `""` to use the system default time zone, but beware that this
+#'   will not be reproducible across systems.
+#'
+#'   For a complete list of possible time zones, see [OlsonNames()].
+#'   Americans, note that "EST" is a Canadian time zone that does not have
+#'   DST. It is *not* Eastern Standard Time. It's better to use
+#'   "US/Eastern", "US/Central" etc.
+#' @param encoding Default encoding. This only affects how the file is
+#'   read - readr always converts the output to UTF-8.
+#' @param asciify Should diacritics be stripped from date names and converted to
+#'   ASCII? This is useful if you're dealing with ASCII data where the correct
+#'   spellings have been lost. Requires the \pkg{stringi} package.
+#' @export
+#' @examples
+#' locale()
+#' locale("fr")
+#'
+#' # South American locale
+#' locale("es", decimal_mark = ",")
+locale <- function(date_names = "en",
+                   date_format = "%AD", time_format = "%AT",
+                   decimal_mark = ".", grouping_mark = ",",
+                   tz = "UTC", encoding = "UTF-8",
+                   asciify = FALSE) {
+  if (is.character(date_names)) {
+    date_names <- date_names_lang(date_names)
+  }
+  stopifnot(is.date_names(date_names))
+  if (asciify) {
+    date_names[] <- lapply(date_names, stringi::stri_trans_general, id = "latin-ascii")
+  }
+
+  if (missing(grouping_mark) && !missing(decimal_mark)) {
+    grouping_mark <- if (decimal_mark == ".") "," else "."
+  } else if (missing(decimal_mark) && !missing(grouping_mark)) {
+    decimal_mark <- if (grouping_mark == ".") "," else "."
+  }
+
+  stopifnot(decimal_mark %in% c(".", ","))
+  check_string(grouping_mark)
+  if (decimal_mark == grouping_mark) {
+    stop("`decimal_mark` and `grouping_mark` must be different", call. = FALSE)
+  }
+
+  tz <- check_tz(tz)
+  check_encoding(encoding)
+
+  structure(
+    list(
+      date_names = date_names,
+      date_format = date_format,
+      time_format = time_format,
+      decimal_mark = decimal_mark,
+      grouping_mark = grouping_mark,
+      tz = tz,
+      encoding = encoding
+    ),
+    class = "locale"
+  )
+}
+
+is.locale <- function(x) inherits(x, "locale")
+
+#' @export
+print.locale <- function(x, ...) {
+  cat("<locale>\n")
+  cat("Numbers:  ", prettyNum(123456.78,
+    big.mark = x$grouping_mark,
+    decimal.mark = x$decimal_mark, digits = 8
+  ), "\n", sep = "")
+  cat("Formats:  ", x$date_format, " / ", x$time_format, "\n", sep = "")
+  cat("Timezone: ", x$tz, "\n", sep = "")
+  cat("Encoding: ", x$encoding, "\n", sep = "")
+  print(x$date_names)
+}
+
+#' @export
+#' @rdname locale
+default_locale <- function() {
+  loc <- getOption("readr.default_locale")
+  if (is.null(loc)) {
+    loc <- locale()
+    options("readr.default_locale" = loc)
+  }
+
+  loc
+}
+
+check_tz <- function(x) {
+  check_string(x, nm = "tz")
+
+  if (identical(x, "")) {
+    x <- Sys.timezone()
+
+    if (identical(x, "") || identical(x, NA_character_)) {
+      x <- "UTC"
+    }
+  }
+
+  if (x %in% tzdb::tzdb_names()) {
+    x
+  } else {
+    stop("Unknown TZ ", x, call. = FALSE)
+  }
+}
+
+check_encoding <- function(x) {
+  check_string(x, nm = "encoding")
+
+  if (tolower(x) %in% tolower(iconvlist())) {
+    return(TRUE)
+  }
+
+  stop("Unknown encoding ", x, call. = FALSE)
+}
+
+## datetime
+
+#' Create or retrieve date names
+#'
+#' When parsing dates, you often need to know how weekdays of the week and
+#' months are represented as text. This pair of functions allows you to either
+#' create your own, or retrieve from a standard list. The standard list is
+#' derived from ICU (`http://site.icu-project.org`) via the stringi package.
+#'
+#' @param mon,mon_ab Full and abbreviated month names.
+#' @param day,day_ab Full and abbreviated week day names. Starts with Sunday.
+#' @param am_pm Names used for AM and PM.
+#' @export
+#' @examples
+#' date_names_lang("en")
+#' date_names_lang("ko")
+#' date_names_lang("fr")
+date_names <- function(mon, mon_ab = mon, day, day_ab = day,
+                       am_pm = c("AM", "PM")) {
+  stopifnot(is.character(mon), length(mon) == 12)
+  stopifnot(is.character(mon_ab), length(mon_ab) == 12)
+  stopifnot(is.character(day), length(day) == 7)
+  stopifnot(is.character(day_ab), length(day_ab) == 7)
+
+  structure(
+    list(
+      mon = enc2utf8(mon),
+      mon_ab = enc2utf8(mon_ab),
+      day = enc2utf8(day),
+      day_ab = enc2utf8(day_ab),
+      am_pm = enc2utf8(am_pm)
+    ),
+    class = "date_names"
+  )
+}
+
+#' @export
+#' @rdname date_names
+#' @param language A BCP 47 locale, made up of a language and a region,
+#'   e.g. `"en"` for American English. See `date_names_langs()`
+#'   for a complete list of available locales.
+date_names_lang <- function(language) {
+  check_string(language)
+
+  symbols <- date_symbols[[language]]
+  if (is.null(symbols)) {
+    stop("Unknown language '", language, "'", call. = FALSE)
+  }
+
+  symbols
+}
+
+#' @export
+#' @rdname date_names
+date_names_langs <- function() {
+  names(date_symbols)
+}
+
+#' @export
+print.date_names <- function(x, ...) {
+  cat("<date_names>\n")
+
+  if (identical(x$day, x$day_ab)) {
+    day <- paste0(x$day, collapse = ", ")
+  } else {
+    day <- paste0(x$day, " (", x$day_ab, ")", collapse = ", ")
+  }
+
+  if (identical(x$mon, x$mon_ab)) {
+    mon <- paste0(x$mon, collapse = ", ")
+  } else {
+    mon <- paste0(x$mon, " (", x$mon_ab, ")", collapse = ", ")
+  }
+  am_pm <- paste0(x$am_pm, collapse = "/")
+
+  cat_wrap("Days:   ", day)
+  cat_wrap("Months: ", mon)
+  cat_wrap("AM/PM:  ", am_pm)
+}
+
+is.date_names <- function(x) inherits(x, "date_names")
+
+cat_wrap <- function(header, body) {
+  body <- strwrap(body, exdent = nchar(header))
+  cat(header, paste(body, collapse = "\n"), "\n", sep = "")
+}
+
+## utils
+
+check_string <- function(x, nm = deparse(substitute(x)), optional = FALSE) {
+  if (rlang::is_string(x)) {
+    return()
+  }
+  if (optional && is.null(x)) {
+    return()
+  }
+  stop("`", nm, "` must be a string.", call. = FALSE)
+}
+
+## data symbol creation
+
+## library(stringi)
+
+## locs <- stri_locale_list()
+## base <- unique(stri_split_fixed(locs, "_", n = 2, simplify = TRUE)[, 1])
+
+## locale_info <- function(x) {
+##   full <- stri_datetime_symbols(x, context = "format", width = "wide")
+##   abbr <- stri_datetime_symbols(x, context = "format", width = "abbreviated")
+
+##   date_names(
+##     mon = full$Month,
+##     mon_ab = abbr$Month,
+##     day = full$Weekday,
+##     day_ab = abbr$Weekday,
+##     am_pm = full$AmPm
+##   )
+## }
+
+## date_symbols <- lapply(base, locale_info)
+## names(date_symbols) <- base
+
+## usethis::use_data(date_symbols, internal = TRUE, overwrite = TRUE)
+
