@@ -55,17 +55,8 @@ str(text_only)
 Inferencing the column types
 
 ``` r
-library(minty)
+library(minty, warn.conflicts = FALSE)
 data <- type_convert(text_only)
-#> Registered S3 methods overwritten by 'readr':
-#>   method                from 
-#>   as.character.col_spec minty
-#>   format.col_spec       minty
-#>   print.col_spec        minty
-#>   print.collector       minty
-#>   print.date_names      minty
-#>   print.locale          minty
-#>   str.col_spec          minty
 #> 
 #> ── Column specification ────────────────────────────────────────────────────────
 #> cols(

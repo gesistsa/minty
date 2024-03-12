@@ -48,7 +48,7 @@ str(text_only)
 Inferencing the column types
 
 ```{r}
-library(minty)
+library(minty, warn.conflicts = FALSE)
 data <- type_convert(text_only)
 data
 ```
