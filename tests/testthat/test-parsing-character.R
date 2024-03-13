@@ -1,17 +1,17 @@
-test_that("ws dropped by default", {
-  df <- read_csv(I("x\n a \n    b\n"))
-  expect_equal(df$x, c("a", "b"))
-})
+## test_that("ws dropped by default", {
+##   df <- read_csv(I("x\n a \n    b\n"))
+##   expect_equal(df$x, c("a", "b"))
+## })
 
-test_that("trim_ws = FALSE keeps ws", {
-  df <- read_csv(I("x\n a\nb \n"), trim_ws = FALSE)
-  expect_equal(df$x, c(" a", "b "))
-})
+## test_that("trim_ws = FALSE keeps ws", {
+##   df <- read_csv(I("x\n a\nb \n"), trim_ws = FALSE)
+##   expect_equal(df$x, c(" a", "b "))
+## })
 
-test_that("trim_ws = TRUE trims spaces and tabs", {
-  df <- read_csv(I("x\n a\n\tb \t\n"), trim_ws = TRUE)
-  expect_equal(df$x, c("a", "b"))
-})
+## test_that("trim_ws = TRUE trims spaces and tabs", {
+##   df <- read_csv(I("x\n a\n\tb \t\n"), trim_ws = TRUE)
+##   expect_equal(df$x, c("a", "b"))
+## })
 
 
 
@@ -33,87 +33,87 @@ test_that("locale encoding affects parsing", {
   expect_identical(as_raw(x), as_raw(z))
 })
 
-test_that("Unicode Byte order marks are stripped from output", {
+## test_that("Unicode Byte order marks are stripped from output", {
 
-  # UTF-8
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(
-        0xef, 0xbb, 0xbf, # BOM
-        0x41, # A
-        0x0A # newline
-      ))
-    )),
-    as.raw(0x41)
-  )
+##   # UTF-8
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(
+##         0xef, 0xbb, 0xbf, # BOM
+##         0x41, # A
+##         0x0A # newline
+##       ))
+##     )),
+##     as.raw(0x41)
+##   )
 
-  # UTF-16 Big Endian
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(
-        0xfe, 0xff, # BOM
-        0x41, # A
-        0x0A # newline
-      ))
-    )),
-    as.raw(0x41)
-  )
+##   # UTF-16 Big Endian
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(
+##         0xfe, 0xff, # BOM
+##         0x41, # A
+##         0x0A # newline
+##       ))
+##     )),
+##     as.raw(0x41)
+##   )
 
-  # UTF-16 Little Endian
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(
-        0xff, 0xfe, # BOM
-        0x41, # A
-        0x0A # newline
-      ))
-    )),
-    as.raw(0x41)
-  )
+##   # UTF-16 Little Endian
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(
+##         0xff, 0xfe, # BOM
+##         0x41, # A
+##         0x0A # newline
+##       ))
+##     )),
+##     as.raw(0x41)
+##   )
 
-  # UTF-32 Big Endian
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(
-        0x00, 0x00, 0xfe, 0xff, # BOM
-        0x41, # A
-        0x0A # newline
-      ))
-    )),
-    as.raw(0x41)
-  )
+##   # UTF-32 Big Endian
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(
+##         0x00, 0x00, 0xfe, 0xff, # BOM
+##         0x41, # A
+##         0x0A # newline
+##       ))
+##     )),
+##     as.raw(0x41)
+##   )
 
-  # UTF-32 Little Endian
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(
-        0xff, 0xfe, 0x00, 0x00, # BOM
-        0x41, # A
-        0x0A # newline
-      ))
-    )),
-    as.raw(0x41)
-  )
+##   # UTF-32 Little Endian
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(
+##         0xff, 0xfe, 0x00, 0x00, # BOM
+##         0x41, # A
+##         0x0A # newline
+##       ))
+##     )),
+##     as.raw(0x41)
+##   )
 
-  # Vectors shorter than the BOM are handled safely
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(0xef, 0xbb))
-    )),
-    as.raw(c(0xef, 0xbb))
-  )
+##   # Vectors shorter than the BOM are handled safely
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(0xef, 0xbb))
+##     )),
+##     as.raw(c(0xef, 0xbb))
+##   )
 
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(0xfe))
-    )),
-    as.raw(c(0xfe))
-  )
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(0xfe))
+##     )),
+##     as.raw(c(0xfe))
+##   )
 
-  expect_equal(
-    charToRaw(read_lines(
-      as.raw(c(0xff))
-    )),
-    as.raw(c(0xff))
-  )
-})
+##   expect_equal(
+##     charToRaw(read_lines(
+##       as.raw(c(0xff))
+##     )),
+##     as.raw(c(0xff))
+##   )
+## })

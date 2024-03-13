@@ -1307,6 +1307,10 @@ utctime <- function(year, month, day, hour, min, sec, psec) {
   )
 }
 
+POSIXct <- function(x, tz = "UTC") {
+  structure(x, class = c("POSIXct", "POSIXt"), tzone = tz)
+}
+
 ## data symbol creation
 
 ## library(stringi)

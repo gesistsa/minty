@@ -11,58 +11,6 @@
 #include "TokenizerLine.h"
 #include "Warnings.h"
 
-[[cpp11::register]] cpp11::integers
-dim_tokens_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec) {
-  SourcePtr source = Source::create(sourceSpec);
-  TokenizerPtr tokenizer = Tokenizer::create(tokenizerSpec);
-  tokenizer->tokenize(source->begin(), source->end());
-
-  int rows = -1;
-
-  int cols = -1;
-
-  for (Token t = tokenizer->nextToken(); t.type() != TOKEN_EOF;
-       t = tokenizer->nextToken()) {
-    rows = t.row();
-
-    if ((int)t.col() > cols) {
-      cols = t.col();
-    }
-  }
-
-  cpp11::writable::integers out(rows + 1);
-  for (auto&& x : out) {
-    x = cols + 1;
-  }
-  return out;
-}
-
-[[cpp11::register]] std::vector<int> count_fields_(
-    const cpp11::list& sourceSpec,
-    const cpp11::list& tokenizerSpec,
-    int n_max) {
-  SourcePtr source = Source::create(sourceSpec);
-  TokenizerPtr tokenizer = Tokenizer::create(tokenizerSpec);
-  tokenizer->tokenize(source->begin(), source->end());
-
-  std::vector<int> fields;
-
-  for (Token t = tokenizer->nextToken(); t.type() != TOKEN_EOF;
-       t = tokenizer->nextToken()) {
-    if (n_max > 0 && t.row() >= (size_t)n_max) {
-      break;
-    }
-
-    if (t.row() >= fields.size()) {
-      fields.resize(t.row() + 1);
-    }
-
-    fields[t.row()] = t.col() + 1;
-  }
-
-  return fields;
-}
-
 [[cpp11::register]] cpp11::list guess_header_(
     const cpp11::list& sourceSpec,
     const cpp11::list& tokenizerSpec,
@@ -103,48 +51,6 @@ dim_tokens_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec) {
   using namespace cpp11::literals;
   return cpp11::writable::list(
       {"header"_nm = out.vector(), "skip"_nm = source->skippedRows() + 1});
-}
-
-[[cpp11::register]] SEXP tokenize_(
-    const cpp11::list& sourceSpec,
-    const cpp11::list& tokenizerSpec,
-    int n_max) {
-  Warnings warnings;
-
-  SourcePtr source = Source::create(sourceSpec);
-  TokenizerPtr tokenizer = Tokenizer::create(tokenizerSpec);
-  tokenizer->tokenize(source->begin(), source->end());
-  tokenizer->setWarnings(&warnings);
-
-  std::vector<std::vector<std::string>> rows;
-
-  for (Token t = tokenizer->nextToken(); t.type() != TOKEN_EOF;
-       t = tokenizer->nextToken()) {
-    if (n_max > 0 && t.row() >= (size_t)n_max) {
-      break;
-    }
-
-    if (t.row() >= rows.size()) {
-      rows.resize(t.row() + 1);
-    }
-
-    std::vector<std::string>& row = rows[t.row()];
-    if (t.col() >= row.size()) {
-      row.resize(t.col() + 1);
-    }
-
-    row[t.col()] = t.asString();
-  }
-
-  cpp11::writable::list out;
-  out.reserve(rows.size());
-
-  for (auto&& row : rows) {
-    cpp11::sexp row_data(cpp11::as_sexp(row));
-    out.push_back(row_data);
-  }
-
-  return warnings.addAsAttribute(out);
 }
 
 [[cpp11::register]] SEXP parse_vector_(

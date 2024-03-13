@@ -78,38 +78,6 @@ emptyCols_(SourceIterator begin, SourceIterator end, size_t n = 100) {
   return is_white;
 }
 
-[[cpp11::register]] cpp11::list
-whitespaceColumns(const cpp11::list& sourceSpec, int n, std::string comment) {
-  SourcePtr source = Source::create(sourceSpec);
-
-  skip_t s = skip_comments(source->begin(), source->end(), std::move(comment));
-
-  std::vector<bool> empty = emptyCols_(s.begin, source->end(), n);
-  std::vector<int> begin;
-
-  std::vector<int> end;
-
-  bool in_col = false;
-
-  for (size_t i = 0; i < empty.size(); ++i) {
-    if (in_col && empty[i]) {
-      end.push_back(i);
-      in_col = false;
-    } else if (!in_col && !empty[i]) {
-      begin.push_back(i);
-      in_col = true;
-    }
-  }
-
-  if (in_col) {
-    end.push_back(empty.size());
-  }
-
-  using namespace cpp11::literals;
-  return cpp11::writable::list(
-      {"begin"_nm = begin, "end"_nm = end, "skip"_nm = s.lines});
-}
-
 // TokenizerFwf --------------------------------------------------------------
 
 #include "TokenizerFwf.h"
