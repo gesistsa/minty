@@ -75,7 +75,6 @@ parse_guess(c("2010-10-10"))
 Other parsers: 
 \code{\link{col_skip}()},
 \code{\link{cols}()},
-\code{\link{cols_condense}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_logical}()},

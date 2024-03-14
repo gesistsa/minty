@@ -52,7 +52,6 @@ parse_number(c("1", "2", "3", "NA", "Nothing"), na = c("NA", "Nothing"))
 Other parsers: 
 \code{\link{col_skip}()},
 \code{\link{cols}()},
-\code{\link{cols_condense}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_guess}()},
