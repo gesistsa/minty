@@ -38,17 +38,29 @@ You can install the development version of minty like so:
 A character-only data.frame
 
 ``` r
-text_only <- data.frame(maybe_age = c("17", "18", "20"),
+text_only <- data.frame(maybe_age = c("17", "18", "019"),
                         maybe_male = c("true", "false", "true"),
                         maybe_name = c("AA", "BB", "CC"),
                         some_na = c("NA", "Not good", "Bad"),
                         dob = c("2019/07/21", "2019/08/31", "2019/10/01"))
 str(text_only)
 #> 'data.frame':    3 obs. of  5 variables:
-#>  $ maybe_age : chr  "17" "18" "20"
+#>  $ maybe_age : chr  "17" "18" "019"
 #>  $ maybe_male: chr  "true" "false" "true"
 #>  $ maybe_name: chr  "AA" "BB" "CC"
 #>  $ some_na   : chr  "NA" "Not good" "Bad"
+#>  $ dob       : chr  "2019/07/21" "2019/08/31" "2019/10/01"
+```
+
+``` r
+## built-in function type.convert:
+## except numeric, no type inferencing
+str(type.convert(text_only, as.is = TRUE))
+#> 'data.frame':    3 obs. of  5 variables:
+#>  $ maybe_age : int  17 18 19
+#>  $ maybe_male: chr  "true" "false" "true"
+#>  $ maybe_name: chr  "AA" "BB" "CC"
+#>  $ some_na   : chr  NA "Not good" "Bad"
 #>  $ dob       : chr  "2019/07/21" "2019/08/31" "2019/10/01"
 ```
 
@@ -60,7 +72,7 @@ data <- type_convert(text_only)
 #> 
 #> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
-#>   maybe_age = col_double(),
+#>   maybe_age = col_character(),
 #>   maybe_male = col_logical(),
 #>   maybe_name = col_character(),
 #>   some_na = col_character(),
@@ -70,15 +82,68 @@ data
 #>   maybe_age maybe_male maybe_name  some_na        dob
 #> 1        17       TRUE         AA     <NA> 2019-07-21
 #> 2        18      FALSE         BB Not good 2019-08-31
-#> 3        20       TRUE         CC      Bad 2019-10-01
+#> 3       019       TRUE         CC      Bad 2019-10-01
 ```
 
 ``` r
 str(data)
 #> 'data.frame':    3 obs. of  5 variables:
-#>  $ maybe_age : num  17 18 20
+#>  $ maybe_age : chr  "17" "18" "019"
 #>  $ maybe_male: logi  TRUE FALSE TRUE
 #>  $ maybe_name: chr  "AA" "BB" "CC"
 #>  $ some_na   : chr  NA "Not good" "Bad"
 #>  $ dob       : Date, format: "2019-07-21" "2019-08-31" ...
+```
+
+### Type-based parsing tools
+
+``` r
+parse_datetime("1979-10-14T10:11:12.12345")
+#> [1] "1979-10-14 10:11:12 UTC"
+```
+
+``` r
+fr <- locale("fr")
+parse_date("1 janv. 2010", "%d %b %Y", locale = fr)
+#> [1] "2010-01-01"
+```
+
+``` r
+de <- locale("de", decimal_mark = ",")
+parse_number("1.697,31", local = de)
+#> [1] 1697.31
+```
+
+``` r
+parse_number("$1,123,456.00")
+#> [1] 1123456
+```
+
+``` r
+## This is perhaps Python
+parse_logical(c("True", "False"))
+#> [1]  TRUE FALSE
+```
+
+### Type guesser
+
+``` r
+parse_guess(c("True", "TRUE", "false", "F"))
+#> [1]  TRUE  TRUE FALSE FALSE
+```
+
+``` r
+parse_guess(c("123.45", "1990", "7619.0"))
+#> [1]  123.45 1990.00 7619.00
+```
+
+``` r
+res <- parse_guess(c("2019-07-21", "2019-08-31", "2019-10-01", "IDK"), na = "IDK")
+res
+#> [1] "2019-07-21" "2019-08-31" "2019-10-01" NA
+```
+
+``` r
+str(res)
+#>  Date[1:4], format: "2019-07-21" "2019-08-31" "2019-10-01" NA
 ```

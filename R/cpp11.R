@@ -4,28 +4,12 @@ collectorGuess <- function(input, locale_, guessInteger) {
   .Call(`_minty_collectorGuess`, input, locale_, guessInteger)
 }
 
-whitespaceColumns <- function(sourceSpec, n, comment) {
-  .Call(`_minty_whitespaceColumns`, sourceSpec, n, comment)
-}
-
 utctime_ <- function(year, month, day, hour, min, sec, psec) {
   .Call(`_minty_utctime_`, year, month, day, hour, min, sec, psec)
 }
 
-dim_tokens_ <- function(sourceSpec, tokenizerSpec) {
-  .Call(`_minty_dim_tokens_`, sourceSpec, tokenizerSpec)
-}
-
-count_fields_ <- function(sourceSpec, tokenizerSpec, n_max) {
-  .Call(`_minty_count_fields_`, sourceSpec, tokenizerSpec, n_max)
-}
-
 guess_header_ <- function(sourceSpec, tokenizerSpec, locale_) {
   .Call(`_minty_guess_header_`, sourceSpec, tokenizerSpec, locale_)
-}
-
-tokenize_ <- function(sourceSpec, tokenizerSpec, n_max) {
-  .Call(`_minty_tokenize_`, sourceSpec, tokenizerSpec, n_max)
 }
 
 parse_vector_ <- function(x, collectorSpec, locale_, na, trim_ws) {

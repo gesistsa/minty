@@ -48,6 +48,18 @@ time formats specified in the \code{\link[=locale]{locale()}}.
 
 Unlike \code{\link[=strptime]{strptime()}}, the format specification must match
 the complete string.}
+
+\item{na}{Character vector of strings to interpret as missing values. Set this
+option to \code{character()} to indicate no missing values.}
+
+\item{locale}{The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+\code{\link[=locale]{locale()}} to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.}
+
+\item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?}
 }
 \value{
 A \code{\link[=POSIXct]{POSIXct()}} vector with \code{tzone} attribute set to

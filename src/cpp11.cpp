@@ -12,13 +12,6 @@ extern "C" SEXP _minty_collectorGuess(SEXP input, SEXP locale_, SEXP guessIntege
     return cpp11::as_sexp(collectorGuess(cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(input), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_), cpp11::as_cpp<cpp11::decay_t<bool>>(guessInteger)));
   END_CPP11
 }
-// TokenizerFwf.cpp
-cpp11::list whitespaceColumns(const cpp11::list& sourceSpec, int n, std::string comment);
-extern "C" SEXP _minty_whitespaceColumns(SEXP sourceSpec, SEXP n, SEXP comment) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(whitespaceColumns(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(sourceSpec), cpp11::as_cpp<cpp11::decay_t<int>>(n), cpp11::as_cpp<cpp11::decay_t<std::string>>(comment)));
-  END_CPP11
-}
 // datetime.cpp
 cpp11::writable::doubles utctime_(const cpp11::integers& year, const cpp11::integers& month, const cpp11::integers& day, const cpp11::integers& hour, const cpp11::integers& min, const cpp11::integers& sec, const cpp11::doubles& psec);
 extern "C" SEXP _minty_utctime_(SEXP year, SEXP month, SEXP day, SEXP hour, SEXP min, SEXP sec, SEXP psec) {
@@ -27,31 +20,10 @@ extern "C" SEXP _minty_utctime_(SEXP year, SEXP month, SEXP day, SEXP hour, SEXP
   END_CPP11
 }
 // parse.cpp
-cpp11::integers dim_tokens_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec);
-extern "C" SEXP _minty_dim_tokens_(SEXP sourceSpec, SEXP tokenizerSpec) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(dim_tokens_(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(sourceSpec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(tokenizerSpec)));
-  END_CPP11
-}
-// parse.cpp
-std::vector<int> count_fields_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec, int n_max);
-extern "C" SEXP _minty_count_fields_(SEXP sourceSpec, SEXP tokenizerSpec, SEXP n_max) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(count_fields_(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(sourceSpec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(tokenizerSpec), cpp11::as_cpp<cpp11::decay_t<int>>(n_max)));
-  END_CPP11
-}
-// parse.cpp
 cpp11::list guess_header_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec, const cpp11::list& locale_);
 extern "C" SEXP _minty_guess_header_(SEXP sourceSpec, SEXP tokenizerSpec, SEXP locale_) {
   BEGIN_CPP11
     return cpp11::as_sexp(guess_header_(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(sourceSpec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(tokenizerSpec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_)));
-  END_CPP11
-}
-// parse.cpp
-SEXP tokenize_(const cpp11::list& sourceSpec, const cpp11::list& tokenizerSpec, int n_max);
-extern "C" SEXP _minty_tokenize_(SEXP sourceSpec, SEXP tokenizerSpec, SEXP n_max) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(tokenize_(cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(sourceSpec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(tokenizerSpec), cpp11::as_cpp<cpp11::decay_t<int>>(n_max)));
   END_CPP11
 }
 // parse.cpp
@@ -71,15 +43,11 @@ extern "C" SEXP _minty_type_convert_col(SEXP x, SEXP spec, SEXP locale_, SEXP co
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_minty_collectorGuess",    (DL_FUNC) &_minty_collectorGuess,    3},
-    {"_minty_count_fields_",     (DL_FUNC) &_minty_count_fields_,     3},
-    {"_minty_dim_tokens_",       (DL_FUNC) &_minty_dim_tokens_,       2},
-    {"_minty_guess_header_",     (DL_FUNC) &_minty_guess_header_,     3},
-    {"_minty_parse_vector_",     (DL_FUNC) &_minty_parse_vector_,     5},
-    {"_minty_tokenize_",         (DL_FUNC) &_minty_tokenize_,         3},
-    {"_minty_type_convert_col",  (DL_FUNC) &_minty_type_convert_col,  6},
-    {"_minty_utctime_",          (DL_FUNC) &_minty_utctime_,          7},
-    {"_minty_whitespaceColumns", (DL_FUNC) &_minty_whitespaceColumns, 3},
+    {"_minty_collectorGuess",   (DL_FUNC) &_minty_collectorGuess,   3},
+    {"_minty_guess_header_",    (DL_FUNC) &_minty_guess_header_,    3},
+    {"_minty_parse_vector_",    (DL_FUNC) &_minty_parse_vector_,    5},
+    {"_minty_type_convert_col", (DL_FUNC) &_minty_type_convert_col, 6},
+    {"_minty_utctime_",         (DL_FUNC) &_minty_utctime_,         7},
     {NULL, NULL, 0}
 };
 }

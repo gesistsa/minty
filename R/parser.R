@@ -31,8 +31,6 @@ collector_find <- function(name) {
 #' @family parsers
 #' @param x Character vector of elements to parse.
 #' @param collector Column specification.
-#' @inheritParams read_delim
-#' @inheritParams tokenizer_delim
 #' @keywords internal
 #' @export
 #' @examples
@@ -58,8 +56,15 @@ parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale
 #' @name parse_atomic
 #' @aliases NULL
 #' @param x Character vector of values to parse.
-#' @inheritParams tokenizer_delim
-#' @inheritParams read_delim
+#' @param na Character vector of strings to interpret as missing values. Set this
+#'   option to `character()` to indicate no missing values.
+#' @param locale The locale controls defaults that vary from place to place.
+#'   The default locale is US-centric (like R), but you can use
+#'   [locale()] to create your own locale that controls things like
+#'   the default time zone, encoding, decimal mark, big mark, and day/month
+#'   names.
+#' @param trim_ws Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+#'     each field before parsing it?
 #' @family parsers
 #' @examples
 #' parse_integer(c("1", "2", "3"))
@@ -143,8 +148,6 @@ col_skip <- function() {
 #' grouping mark specified by the locale is ignored inside the number.
 #'
 #' @inheritParams parse_atomic
-#' @inheritParams tokenizer_delim
-#' @inheritParams read_delim
 #' @return A numeric vector (double) of parsed numbers.
 #' @family parsers
 #' @export
@@ -183,8 +186,6 @@ col_number <- function() {
 #' if needed.
 #'
 #' @inheritParams parse_atomic
-#' @inheritParams tokenizer_delim
-#' @inheritParams read_delim
 #' @family parsers
 #' @export
 #' @examples
@@ -238,8 +239,6 @@ guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na
 #'   is included in the levels of the constructed factor.
 #'
 #' @inheritParams parse_atomic
-#' @inheritParams tokenizer_delim
-#' @inheritParams read_delim
 #' @family parsers
 #' @export
 #' @examples
@@ -334,13 +333,12 @@ col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
 #'
 #'   Unlike [strptime()], the format specification must match
 #'   the complete string.
-#' @inheritParams read_delim
-#' @inheritParams tokenizer_delim
 #' @return A [POSIXct()] vector with `tzone` attribute set to
 #'   `tz`. Elements that could not be parsed (or did not generate valid
 #'   dates) will be set to `NA`, and a warning message will inform
 #'   you of the total number of failures.
 #' @family parsers
+#' @inheritParams parse_atomic
 #' @export
 #' @examples
 #' # Format strings --------------------------------------------------------
@@ -693,7 +691,7 @@ cat_wrap <- function(header, body) {
 #' @family parsers
 #' @param ... Either column objects created by `col_*()`, or their abbreviated
 #'   character names (as described in the `col_types` argument of
-#'   [read_delim()]). If you're only overriding a few columns, it's
+#'   read_delim). If you're only overriding a few columns, it's
 #'   best to refer to columns by name. If not named, the column types must match
 #'   the column names exactly.
 #' @param .default Any named columns not explicitly overridden in `...`
@@ -1027,7 +1025,6 @@ str.col_spec <- function(object, ..., indent.str = "") {
   )
 }
 
-
 #' Examine the column specifications for a data frame
 #'
 #' `spec()` extracts the full column specification from a tibble
@@ -1072,27 +1069,28 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
                                  skip = 0, skip_empty_rows = TRUE,
                                  skip_quote = TRUE,
                                  guess_max = 1000,
-                                 tokenizer = tokenizer_csv(),
+                                 ## tokenizer = tokenizer_csv(),
+                                 tokenizer = NULL,
                                  locale = default_locale(),
                                  drop_skipped_names = FALSE) {
 
   # Figure out the column names -----------------------------------------------
-  if (is.logical(col_names) && length(col_names) == 1) {
-    ds_header <- datasource(file, skip = skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
-    if (col_names) {
-      res <- guess_header(ds_header, tokenizer, locale)
-      col_names <- res$header
-      skip <- res$skip
-    } else {
-      n <- length(guess_header(ds_header, tokenizer, locale)$header)
-      col_names <- paste0("X", seq_len(n))
-    }
-    guessed_names <- TRUE
-  } else if (is.character(col_names)) {
-    guessed_names <- FALSE
-  } else {
-    stop("`col_names` must be TRUE, FALSE or a character vector", call. = FALSE)
-  }
+  ## if (is.logical(col_names) && length(col_names) == 1) {
+  ##   ds_header <- datasource(file, skip = skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
+  ##   if (col_names) {
+  ##     res <- guess_header(ds_header, tokenizer, locale)
+  ##     col_names <- res$header
+  ##     skip <- res$skip
+  ##   } else {
+  ##     n <- length(guess_header(ds_header, tokenizer, locale)$header)
+  ##     col_names <- paste0("X", seq_len(n))
+  ##   }
+  ##   guessed_names <- TRUE
+  ## } else if (is.character(col_names)) {
+    guessed_names <- FALSE ### For our use case, col_names is always character
+  ## } else {
+  ##   stop("`col_names` must be TRUE, FALSE or a character vector", call. = FALSE)
+  ## }
 
   missing_names <- is.na(col_names)
   if (any(missing_names)) {
@@ -1215,12 +1213,13 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
   # Guess any types that need to be guessed ------------------------------------
 
   is_guess <- vapply(spec$cols, function(x) inherits(x, "collector_guess"), logical(1))
-  if (any(is_guess)) {
-    if (is.null(guessed_types)) {
-      ds <- datasource(file, skip = spec$skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
-      guessed_types <- guess_types(ds, tokenizer, locale, guess_max = guess_max)
-    }
-
+    if (any(is_guess)) {
+        ## guessed_types is alway there for our case
+    ## if (is.null(guessed_types)) {
+    ##   ds <- datasource(file, skip = spec$skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
+    ##   guessed_types <- guess_types(ds, tokenizer, locale, guess_max = guess_max)
+    ## }
+      
     # Need to be careful here: there might be more guesses than types/names
     guesses <- guessed_types[seq_along(spec$cols)][is_guess]
     spec$cols[is_guess] <- lapply(guesses, collector_find)
@@ -1229,32 +1228,32 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
   spec
 }
 
-check_guess_max <- function(guess_max, max_limit = .Machine$integer.max %/% 100) {
-  if (length(guess_max) != 1 || !is.numeric(guess_max) || !is_integerish(guess_max) ||
-    is.na(guess_max) || guess_max < 0) {
-    stop("`guess_max` must be a positive integer", call. = FALSE)
-  }
+## check_guess_max <- function(guess_max, max_limit = .Machine$integer.max %/% 100) {
+##   if (length(guess_max) != 1 || !is.numeric(guess_max) || !is_integerish(guess_max) ||
+##     is.na(guess_max) || guess_max < 0) {
+##     stop("`guess_max` must be a positive integer", call. = FALSE)
+##   }
 
-  if (guess_max > max_limit) {
-    warning("`guess_max` is a very large value, setting to `", max_limit,
-      "` to avoid exhausting memory",
-      call. = FALSE
-    )
-    guess_max <- max_limit
-  }
-  guess_max
-}
+##   if (guess_max > max_limit) {
+##     warning("`guess_max` is a very large value, setting to `", max_limit,
+##       "` to avoid exhausting memory",
+##       call. = FALSE
+##     )
+##     guess_max <- max_limit
+##   }
+##   guess_max
+## }
 
-guess_types <- function(datasource, tokenizer, locale, guess_max = 1000,
-                        max_limit = .Machine$integer.max %/% 100) {
-  guess_max <- check_guess_max(guess_max, max_limit)
+## guess_types <- function(datasource, tokenizer, locale, guess_max = 1000,
+##                         max_limit = .Machine$integer.max %/% 100) {
+##   guess_max <- check_guess_max(guess_max, max_limit)
 
-  guess_types_(datasource, tokenizer, locale, n = guess_max)
-}
+##   guess_types_(datasource, tokenizer, locale, n = guess_max)
+## }
 
-guess_header <- function(datasource, tokenizer, locale = default_locale()) {
-  guess_header_(datasource, tokenizer, locale)
-}
+## guess_header <- function(datasource, tokenizer, locale = default_locale()) {
+##   guess_header_(datasource, tokenizer, locale)
+## }
 
 
 ## utils
@@ -1289,7 +1288,6 @@ deparse2 <- function(expr, ..., sep = "\n") {
 
 is_syntactic <- function(x) make.names(x) == x
 
-
 is_named <- function(x) {
   nms <- names(x)
 
@@ -1305,6 +1303,10 @@ utctime <- function(year, month, day, hour, min, sec, psec) {
     as.integer(year), as.integer(month), as.integer(day),
     as.integer(hour), as.integer(min), as.integer(sec), as.numeric(psec)
   )
+}
+
+POSIXct <- function(x, tz = "UTC") {
+  structure(x, class = c("POSIXct", "POSIXt"), tzone = tz)
 }
 
 ## data symbol creation
