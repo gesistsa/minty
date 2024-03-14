@@ -883,12 +883,6 @@ print.col_spec <- function(x, n = Inf, condense = NULL, colour = crayon::has_col
   invisible(x)
 }
 
-#' @description
-#' `cols_condense()` takes a spec object and condenses its definition by setting
-#' the default column type to the most frequent type and only listing columns
-#' with a different type.
-#' @rdname spec
-#' @export
 cols_condense <- function(x) {
   types <- vapply(x$cols, function(xx) class(xx)[[1]], character(1))
   counts <- table(types)
@@ -1023,26 +1017,6 @@ str.col_spec <- function(object, ..., indent.str = "") {
     paste(indent.str, specs, collapse = "\n"),
     "\n"
   )
-}
-
-#' Examine the column specifications for a data frame
-#'
-#' `spec()` extracts the full column specification from a tibble
-#' created by readr.
-#'
-#' @family parsers
-#' @param x The data frame object to extract from
-#' @return A col_spec object.
-#' @export
-#' @examples
-#' ##df <- read_csv(readr_example("mtcars.csv"))
-#' ##s <- spec(df)
-#' ##s
-#'
-#' ##cols_condense(s)
-spec <- function(x) {
-  stopifnot(inherits(x, "tbl_df"))
-  attr(x, "spec")
 }
 
 col_concise <- function(x) {
