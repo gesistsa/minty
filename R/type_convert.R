@@ -10,8 +10,6 @@
 #'   a string. See `vignette("readr")` for more details.
 #'
 #'   If `NULL`, column types will be imputed using all rows.
-#' @inheritParams tokenizer_delim
-#' @inheritParams read_delim
 #' @inheritParams guess_parser
 #' @note `type_convert()` removes a 'spec' attribute,
 #' because it likely modifies the column data types.

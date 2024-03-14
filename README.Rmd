@@ -37,12 +37,18 @@ You can install the development version of minty like so:
 A character-only data.frame
 
 ```{r}
-text_only <- data.frame(maybe_age = c("17", "18", "20"),
+text_only <- data.frame(maybe_age = c("17", "18", "019"),
                         maybe_male = c("true", "false", "true"),
                         maybe_name = c("AA", "BB", "CC"),
                         some_na = c("NA", "Not good", "Bad"),
                         dob = c("2019/07/21", "2019/08/31", "2019/10/01"))
 str(text_only)
+```
+
+```{r}
+## built-in function type.convert:
+## except numeric, no type inferencing
+str(type.convert(text_only, as.is = TRUE))
 ```
 
 Inferencing the column types
@@ -55,4 +61,48 @@ data
 
 ```{r}
 str(data)
+```
+
+### Type-based parsing tools
+
+```{r}
+parse_datetime("1979-10-14T10:11:12.12345")
+```
+
+```{r}
+fr <- locale("fr")
+parse_date("1 janv. 2010", "%d %b %Y", locale = fr)
+```
+
+```{r}
+de <- locale("de", decimal_mark = ",")
+parse_number("1.697,31", local = de)
+```
+
+```{r}
+parse_number("$1,123,456.00")
+```
+
+```{r}
+## This is perhaps Python
+parse_logical(c("True", "False"))
+```
+
+### Type guesser
+
+```{r}
+parse_guess(c("True", "TRUE", "false", "F"))
+```
+
+```{r}
+parse_guess(c("123.45", "1990", "7619.0"))
+```
+
+```{r}
+res <- parse_guess(c("2019-07-21", "2019-08-31", "2019-10-01", "IDK"), na = "IDK")
+res
+```
+
+```{r}
+str(res)
 ```

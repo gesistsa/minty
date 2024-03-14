@@ -29,6 +29,18 @@ col_character()
 }
 \arguments{
 \item{x}{Character vector of values to parse.}
+
+\item{na}{Character vector of strings to interpret as missing values. Set this
+option to \code{character()} to indicate no missing values.}
+
+\item{locale}{The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+\code{\link[=locale]{locale()}} to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.}
+
+\item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?}
 }
 \description{
 Use \verb{parse_*()} if you have a character vector you want to parse. Use

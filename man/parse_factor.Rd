@@ -26,8 +26,20 @@ the order in which they appear in \code{x}.}
 
 \item{ordered}{Is it an ordered factor?}
 
+\item{na}{Character vector of strings to interpret as missing values. Set this
+option to \code{character()} to indicate no missing values.}
+
+\item{locale}{The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+\code{\link[=locale]{locale()}} to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.}
+
 \item{include_na}{If \code{TRUE} and \code{x} contains at least one \code{NA}, then \code{NA}
 is included in the levels of the constructed factor.}
+
+\item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?}
 }
 \description{
 \code{parse_factor()} is similar to \code{\link[=factor]{factor()}}, but generates a warning if

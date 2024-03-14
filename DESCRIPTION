@@ -28,4 +28,6 @@ Imports:
     tzdb
 Suggests: 
     knitr,
-    stringi
+    stringi,
+    testthat
+

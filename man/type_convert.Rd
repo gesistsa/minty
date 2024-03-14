@@ -21,6 +21,18 @@ a string. See \code{vignette("readr")} for more details.
 
 If \code{NULL}, column types will be imputed using all rows.}
 
+\item{na}{Character vector of strings to interpret as missing values. Set this
+option to \code{character()} to indicate no missing values.}
+
+\item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?}
+
+\item{locale}{The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+\code{\link[=locale]{locale()}} to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.}
+
 \item{guess_integer}{If \code{TRUE}, guess integer types for whole numbers, if
 \code{FALSE} guess numeric type for all numbers.}
 }
