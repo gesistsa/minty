@@ -10,7 +10,8 @@ type_convert(
   na = c("", "NA"),
   trim_ws = TRUE,
   locale = default_locale(),
-  guess_integer = FALSE
+  guess_integer = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ names.}
 
 \item{guess_integer}{If \code{TRUE}, guess integer types for whole numbers, if
 \code{FALSE} guess numeric type for all numbers.}
+
+\item{verbose}{whether to print messages}
 }
 \description{
 This is useful if you need to do some manual munging - you can read the

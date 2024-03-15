@@ -9,13 +9,16 @@ parse_vector(
   collector,
   na = c("", "NA"),
   locale = default_locale(),
-  trim_ws = TRUE
+  trim_ws = TRUE,
+  .return_problems = FALSE
 )
 }
 \arguments{
 \item{x}{Character vector of elements to parse.}
 
 \item{collector}{Column specification.}
+
+\item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \description{
 Parse a character vector.

@@ -24,7 +24,6 @@ RoxygenNote: 7.3.1
 Imports: 
     cli,
     rlang,
-    crayon,
     tzdb
 Suggests: 
     knitr,
@@ -32,5 +31,3 @@ Suggests:
     testthat,
     withr,
     hms
-
-

@@ -5,7 +5,13 @@
 \alias{col_number}
 \title{Parse numbers, flexibly}
 \usage{
-parse_number(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE)
+parse_number(
+  x,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE,
+  .return_problems = FALSE
+)
 
 col_number()
 }
@@ -23,6 +29,8 @@ names.}
 
 \item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
 each field before parsing it?}
+
+\item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \value{
 A numeric vector (double) of parsed numbers.

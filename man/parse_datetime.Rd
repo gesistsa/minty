@@ -14,7 +14,8 @@ parse_datetime(
   format = "",
   na = c("", "NA"),
   locale = default_locale(),
-  trim_ws = TRUE
+  trim_ws = TRUE,
+  .return_problems = FALSE
 )
 
 parse_date(
@@ -22,7 +23,8 @@ parse_date(
   format = "",
   na = c("", "NA"),
   locale = default_locale(),
-  trim_ws = TRUE
+  trim_ws = TRUE,
+  .return_problems = FALSE
 )
 
 parse_time(
@@ -30,7 +32,8 @@ parse_time(
   format = "",
   na = c("", "NA"),
   locale = default_locale(),
-  trim_ws = TRUE
+  trim_ws = TRUE,
+  .return_problems = FALSE
 )
 
 col_datetime(format = "")
@@ -60,6 +63,8 @@ names.}
 
 \item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
 each field before parsing it?}
+
+\item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \value{
 A \code{\link[=POSIXct]{POSIXct()}} vector with \code{tzone} attribute set to

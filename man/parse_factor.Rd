@@ -12,7 +12,8 @@ parse_factor(
   na = c("", "NA"),
   locale = default_locale(),
   include_na = TRUE,
-  trim_ws = TRUE
+  trim_ws = TRUE,
+  .return_problems = FALSE
 )
 
 col_factor(levels = NULL, ordered = FALSE, include_na = FALSE)
@@ -40,6 +41,8 @@ is included in the levels of the constructed factor.}
 
 \item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
 each field before parsing it?}
+
+\item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \description{
 \code{parse_factor()} is similar to \code{\link[=factor]{factor()}}, but generates a warning if

@@ -24,7 +24,8 @@ packages do not use the main functions (e.g. `readr::read_delim()`) of
 eventually removed from `readr`.
 
 `minty` aims at providing a set of minimal, long-term, and compatible
-type inferencing and parsing tools for those packages.
+type inferencing and parsing tools for those packages. If you need to
+parse interactively, please use either `readr` or `vroom`.
 
 ## Installation
 
@@ -70,15 +71,6 @@ Inferencing the column types
 ``` r
 library(minty, warn.conflicts = FALSE)
 data <- type_convert(text_only)
-#> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   maybe_age = col_character(),
-#>   maybe_male = col_logical(),
-#>   maybe_name = col_character(),
-#>   some_na = col_character(),
-#>   dob = col_date(format = "")
-#> )
 data
 #>   maybe_age maybe_male maybe_name  some_na        dob
 #> 1        17       TRUE         AA     <NA> 2019-07-21
@@ -148,3 +140,89 @@ res
 str(res)
 #>  Date[1:4], format: "2019-07-21" "2019-08-31" "2019-10-01" NA
 ```
+
+## Differences: `readr` vs `minty`
+
+Unlike `readr` and `vroom`, please note that `minty` is mainly for
+**non-interactive usage**. Therefore, `minty` emits fewer messages and
+warnings than `readr` and `vroom`.
+
+``` r
+data <- minty::type_convert(text_only)
+data
+#>   maybe_age maybe_male maybe_name  some_na        dob
+#> 1        17       TRUE         AA     <NA> 2019-07-21
+#> 2        18      FALSE         BB Not good 2019-08-31
+#> 3       019       TRUE         CC      Bad 2019-10-01
+```
+
+``` r
+data <- readr::type_convert(text_only)
+#> Registered S3 methods overwritten by 'readr':
+#>   method                from 
+#>   as.character.col_spec minty
+#>   format.col_spec       minty
+#>   print.col_spec        minty
+#>   print.collector       minty
+#>   print.date_names      minty
+#>   print.locale          minty
+#>   str.col_spec          minty
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
+#> cols(
+#>   maybe_age = col_character(),
+#>   maybe_male = col_logical(),
+#>   maybe_name = col_character(),
+#>   some_na = col_character(),
+#>   dob = col_date(format = "")
+#> )
+data
+#>   maybe_age maybe_male maybe_name  some_na        dob
+#> 1        17       TRUE         AA     <NA> 2019-07-21
+#> 2        18      FALSE         BB Not good 2019-08-31
+#> 3       019       TRUE         CC      Bad 2019-10-01
+```
+
+`verbose` option is added if you like those messages, default to
+`FALSE`.
+
+``` r
+data <- minty::type_convert(text_only, verbose = TRUE)
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
+#> cols(
+#>   maybe_age = col_character(),
+#>   maybe_male = col_logical(),
+#>   maybe_name = col_character(),
+#>   some_na = col_character(),
+#>   dob = col_date(format = "")
+#> )
+```
+
+At the moment, `minty` does not use [the `problems`
+mechanism](https://vroom.r-lib.org/reference/problems.html) by default.
+
+``` r
+minty::parse_logical(c("true", "fake", "IDK"), na = "IDK")
+#> [1] TRUE   NA   NA
+```
+
+``` r
+readr::parse_logical(c("true", "fake", "IDK"), na = "IDK")
+#> Warning: 1 parsing failure.
+#> row col           expected actual
+#>   2  -- 1/0/T/F/TRUE/FALSE   fake
+#> [1] TRUE   NA   NA
+#> attr(,"problems")
+#> # A tibble: 1 × 4
+#>     row   col expected           actual
+#>   <int> <int> <chr>              <chr> 
+#> 1     2    NA 1/0/T/F/TRUE/FALSE fake
+```
+
+## Similar packages
+
+For parsing ambiguous date(time)
+
+  - [timeless](https://github.com/schochastics/timeless)
+  - [anytime](https://github.com/eddelbuettel/anytime)
