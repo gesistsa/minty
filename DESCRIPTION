@@ -6,7 +6,7 @@ Authors@R: c(
     person("readr authors", role = c("ctb", "cph"),
            comment = "readr source code")
   )
-Description: Port the now type inferencing and parsing tools from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
+Description: Port the type inferencing and parsing tools from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
 License: MIT + file LICENSE
 Depends:
     R (>= 3.6)

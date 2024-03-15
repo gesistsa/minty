@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`minty` (**Min**imal **TY**pe Inferencing and Parsing Tools) is an
+`minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is an
 experimental package to spin off the type inferencing and parsing tools
 (the so-called 1e parsing engine) from `readr` (see this issue
 [tidyverse/readr\#1517](https://github.com/tidyverse/readr/issues/1517)).
