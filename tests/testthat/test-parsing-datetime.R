@@ -1,23 +1,9 @@
-test_that("utctime is equivalent to R conversion", {
-  year <- seq(0, 4000)
-  mon <- rep(3L, length(year))
-  day <- rep(1L, length(year))
-  zero_i <- rep(0L, length(year))
-  zero_d <- rep(0, length(year))
-
-  expect_equal(
-    utctime(year, mon, day, zero_i, zero_i, zero_i, zero_d),
-    ISOdatetime(year, mon, day, zero_i, zero_i, zero_i, tz = "UTC")
-  )
-})
-
 # Parsing ----------------------------------------------------------------------
 
 r_parse <- function(x, fmt) as.POSIXct(strptime(x, fmt, tz = "UTC"))
 
 test_that("%d, %m and %y", {
-  target <- utctime(2010L, 2L, 3L, 0L, 0L, 0L, 0)
-
+  target <- as.POSIXct("2010-02-03", tz = "UTC")
   expect_equal(parse_datetime("10-02-03", "%y-%m-%d"), target)
   expect_equal(parse_datetime("10-03-02", "%y-%d-%m"), target)
   expect_equal(parse_datetime("03/02/10", "%d/%m/%y"), target)
@@ -25,8 +11,7 @@ test_that("%d, %m and %y", {
 })
 
 test_that("Compound formats work", {
-  target <- utctime(2010L, 2L, 3L, 0L, 0L, 0L, 0)
-
+  target <- as.POSIXct("2010-02-03", tz = "UTC")
   expect_equal(parse_datetime("02/03/10", "%D"), target)
   expect_equal(parse_datetime("2010-02-03", "%F"), target)
   expect_equal(parse_datetime("10/02/03", "%x"), target)
@@ -44,7 +29,7 @@ test_that("%y matches R behaviour", {
 })
 
 test_that("%e allows leading space", {
-  expect_equal(parse_datetime("201010 1", "%Y%m%e"), utctime(2010L, 10L, 1L, 0L, 0L, 0L, 0))
+  expect_equal(parse_datetime("201010 1", "%Y%m%e"), as.POSIXct("2010-10-1", tz = "UTC"))
 })
 
 test_that("%OS captures partial seconds", {
@@ -221,8 +206,8 @@ test_that("same times with different offsets parsed as same time", {
   # From http://en.wikipedia.org/wiki/ISO_8601#Time_offsets_from_UTC
   same_time <- paste("2010-02-03", c("18:30Z", "22:30+04", "1130-0700", "15:00-03:30"))
   parsed <- parse_datetime(same_time)
-
-  expect_equal(parsed, rep(utctime(2010L, 2L, 3L, 18L, 30L, 0L, 0), 4))
+  target <- as.POSIXct("2010-02-03 18:30:00", tz = "UTC")
+  expect_equal(parsed, rep(target, 4))
 })
 
 test_that("offsets can cross date boundaries", {
