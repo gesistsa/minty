@@ -22,7 +22,6 @@ Language: en-US
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.1
 Imports: 
-    cli,
     rlang,
     tzdb
 Suggests: 
@@ -30,4 +29,6 @@ Suggests:
     stringi,
     testthat,
     withr,
-    hms
+    hms,
+    readr
+

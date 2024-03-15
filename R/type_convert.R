@@ -11,7 +11,7 @@
 #'
 #'   If `NULL`, column types will be imputed using all rows.
 #' @param verbose whether to print messages
-#' @inheritParams guess_parser
+#' @inheritParams parse_guess
 #' @note `type_convert()` removes a 'spec' attribute,
 #' because it likely modifies the column data types.
 #' (see [spec()] for more information about column specifications).
@@ -99,16 +99,4 @@ keep_character_col_types <- function(df, col_types) {
   col_types$cols <- col_types$cols[names(col_types$cols) %in% char_cols]
 
   col_types
-}
-
-#' @rdname parse_guess
-#' @param guess_integer If `TRUE`, guess integer types for whole numbers, if
-#'   `FALSE` guess numeric type for all numbers.
-#' @export
-guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA")) {
-  x[x %in% na] <- NA_character_
-
-  stopifnot(is.locale(locale))
-
-  collectorGuess(x, locale, guessInteger = guess_integer)
 }

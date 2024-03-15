@@ -158,15 +158,6 @@ data
 
 ``` r
 data <- readr::type_convert(text_only)
-#> Registered S3 methods overwritten by 'readr':
-#>   method                from 
-#>   as.character.col_spec minty
-#>   format.col_spec       minty
-#>   print.col_spec        minty
-#>   print.collector       minty
-#>   print.date_names      minty
-#>   print.locale          minty
-#>   str.col_spec          minty
 #> 
 #> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
@@ -184,19 +175,13 @@ data
 ```
 
 `verbose` option is added if you like those messages, default to
-`FALSE`.
+`FALSE`. To keep this package as minimal as possible, these optional
+messages are printed with base R (not `cli`).
 
 ``` r
 data <- minty::type_convert(text_only, verbose = TRUE)
-#> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   maybe_age = col_character(),
-#>   maybe_male = col_logical(),
-#>   maybe_name = col_character(),
-#>   some_na = col_character(),
-#>   dob = col_date(format = "")
-#> )
+#> Column specification:
+#> cols(  maybe_age = col_character(),  maybe_male = col_logical(),  maybe_name = col_character(),  some_na = col_character(),  dob = col_date(format = ""))
 ```
 
 At the moment, `minty` does not use [the `problems`
