@@ -13,11 +13,6 @@ collector <- function(type, ...) {
 
 is.collector <- function(x) inherits(x, "collector")
 
-#' @export
-print.collector <- function(x, ...) {
-  cat("<", class(x)[1], ">\n", sep = "")
-}
-
 collector_find <- function(name) {
   if (is.na(name)) {
     return(col_character())
@@ -186,13 +181,14 @@ col_number <- function() {
 
 #' Parse using the "best" type
 #'
-#' `parse_guess()` returns the parser vector; `guess_parser()`
-#' returns the name of the parser. These functions use a number of heuristics
+#' `parse_guess()` returns the parser vector. This function uses a number of heuristics
 #' to determine which type of vector is "best". Generally they try to err of
 #' the side of safety, as it's straightforward to override the parsing choice
 #' if needed.
 #'
 #' @inheritParams parse_atomic
+#' @param guess_integer If `TRUE`, guess integer types for whole numbers, if
+#'   `FALSE` guess numeric type for all numbers.
 #' @family parsers
 #' @export
 #' @examples
@@ -204,11 +200,9 @@ col_number <- function() {
 #' parse_guess(c("1.6", "2.6", "3.4"))
 #'
 #' # Numbers containing grouping mark
-#' guess_parser("1,234,566")
 #' parse_guess("1,234,566")
 #'
 #' # ISO 8601 date times
-#' guess_parser(c("2010-10-10"))
 #' parse_guess(c("2010-10-10"))
 parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE, .return_problems = FALSE) {
     parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na), na = na, locale = locale, trim_ws = trim_ws,
@@ -221,10 +215,6 @@ col_guess <- function() {
   collector("guess")
 }
 
-#' @rdname parse_guess
-#' @param guess_integer If `TRUE`, guess integer types for whole numbers, if
-#'   `FALSE` guess numeric type for all numbers.
-#' @export
 guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA")) {
   x[x %in% na] <- NA_character_
 
@@ -535,19 +525,6 @@ locale <- function(date_names = "en",
 is.locale <- function(x) inherits(x, "locale")
 
 #' @export
-print.locale <- function(x, ...) {
-  cat("<locale>\n")
-  cat("Numbers:  ", prettyNum(123456.78,
-    big.mark = x$grouping_mark,
-    decimal.mark = x$decimal_mark, digits = 8
-  ), "\n", sep = "")
-  cat("Formats:  ", x$date_format, " / ", x$time_format, "\n", sep = "")
-  cat("Timezone: ", x$tz, "\n", sep = "")
-  cat("Encoding: ", x$encoding, "\n", sep = "")
-  print(x$date_names)
-}
-
-#' @export
 #' @rdname locale
 default_locale <- function() {
   loc <- getOption("readr.default_locale")
@@ -643,28 +620,6 @@ date_names_lang <- function(language) {
 #' @rdname date_names
 date_names_langs <- function() {
   names(date_symbols)
-}
-
-#' @export
-print.date_names <- function(x, ...) {
-  cat("<date_names>\n")
-
-  if (identical(x$day, x$day_ab)) {
-    day <- paste0(x$day, collapse = ", ")
-  } else {
-    day <- paste0(x$day, " (", x$day_ab, ")", collapse = ", ")
-  }
-
-  if (identical(x$mon, x$mon_ab)) {
-    mon <- paste0(x$mon, collapse = ", ")
-  } else {
-    mon <- paste0(x$mon, " (", x$mon_ab, ")", collapse = ", ")
-  }
-  am_pm <- paste0(x$am_pm, collapse = "/")
-
-  cat_wrap("Days:   ", day)
-  cat_wrap("Months: ", mon)
-  cat_wrap("AM/PM:  ", am_pm)
 }
 
 is.date_names <- function(x) inherits(x, "date_names")
@@ -877,21 +832,6 @@ col_to_short <- function(x, ...) {
   )
 }
 
-#' @export
-as.character.col_spec <- function(x, ...) {
-  paste0(
-    collapse = "",
-    vapply(x$cols, col_to_short, character(1))
-  )
-}
-
-#' @export
-print.col_spec <- function(x, n = Inf, condense = NULL, ...) {
-  cat(format.col_spec(x, n = n, condense = condense, ...))
-
-  invisible(x)
-}
-
 cols_condense <- function(x) {
   types <- vapply(x$cols, function(xx) class(xx)[[1]], character(1))
   counts <- table(types)
@@ -902,8 +842,8 @@ cols_condense <- function(x) {
   x
 }
 
-#' @export
-format.col_spec <- function(x, n = Inf, condense = NULL, ...) {
+## Change from S3
+format_col_spec <- function(x, n = Inf, condense = NULL, ...) {
   if (n == 0) {
     return("")
   }
@@ -971,32 +911,13 @@ format.col_spec <- function(x, n = Inf, condense = NULL, ...) {
 
 # Used in read_delim(), read_fwf() and type_convert()
 show_cols_spec <- function(spec, n = getOption("readr.num_columns", 20)) {
-  if (n > 0) {
-    cli_block(class = "readr_spec_message", {
-      cli::cli_h1("Column specification")
-      txt <- strsplit(format(spec, n = n, condense = NULL), "\n")[[1]]
-      cli::cli_verbatim(txt)
-      if (length(spec$cols) >= n) {
-        cli::cli_alert_info("Use {.fn spec} for the full column specifications.")
-      }
-    })
-  }
-}
-
-# This allows str() on a tibble object to print a little nicer.
-#' @export
-str.col_spec <- function(object, ..., indent.str = "") {
-
-  # Split the formatted column spec into strings
-  specs <- strsplit(format(object), "\n")[[1]]
-  cat(
-    sep = "",
-    "\n",
-
-    # Append the current indentation string to the specs
-    paste(indent.str, specs, collapse = "\n"),
-    "\n"
-  )
+    if (n > 0) {
+        message("Column specification: ")
+        message(strsplit(format_col_spec(spec, n = n, condense = NULL), "\n")[[1]])
+        if (length(spec$cols) >= n) {
+            message("Only the first ", n, " columns are printed.", "\n")
+      }        
+    }
 }
 
 col_concise <- function(x) {
@@ -1220,18 +1141,6 @@ check_string <- function(x, nm = deparse(substitute(x)), optional = FALSE) {
     return()
   }
   stop("`", nm, "` must be a string.", call. = FALSE)
-}
-
-cli_block <- function(expr, class = NULL, type = rlang::inform) {
-  msg <- ""
-  withCallingHandlers(
-    expr,
-    message = function(x) {
-      msg <<- paste0(msg, x$message)
-      invokeRestart("muffleMessage")
-    }
-  )
-  type(msg, class = class)
 }
 
 `%||%` <- function(a, b) if (is.null(a)) b else a

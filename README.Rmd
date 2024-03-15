@@ -122,7 +122,7 @@ data <- readr::type_convert(text_only)
 data
 ```
 
-`verbose` option is added if you like those messages, default to `FALSE`.
+`verbose` option is added if you like those messages, default to `FALSE`. To keep this package as minimal as possible, these optional messages are printed with base R (not `cli`).
 
 ```{r}
 data <- minty::type_convert(text_only, verbose = TRUE)
@@ -144,5 +144,4 @@ For parsing ambiguous date(time)
 
 * [timeless](https://github.com/schochastics/timeless)
 * [anytime](https://github.com/eddelbuettel/anytime)
-
 
