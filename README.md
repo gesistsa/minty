@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `minty` (**Min**imal **TY**pe Inferencing and Parsing Tools) is an
