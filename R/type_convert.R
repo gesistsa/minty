@@ -10,6 +10,7 @@
 #'   a string. See `vignette("readr")` for more details.
 #'
 #'   If `NULL`, column types will be imputed using all rows.
+#' @param verbose whether to print messages
 #' @inheritParams guess_parser
 #' @note `type_convert()` removes a 'spec' attribute,
 #' because it likely modifies the column data types.
@@ -27,7 +28,8 @@
 #' df <- data.frame(x = c("NA", "10"), stringsAsFactors = FALSE)
 #' str(type_convert(df))
 type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
-                         locale = default_locale(), guess_integer = FALSE) {
+                         locale = default_locale(), guess_integer = FALSE,
+                         verbose = FALSE) {
   stopifnot(is.data.frame(df))
   is_character <- vapply(df, is.character, logical(1))
 
@@ -54,7 +56,7 @@ type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
   )
 
   ## if (is.null(col_types) && !is_testing()) {
-  if (is.null(col_types)) {
+  if (is.null(col_types) && verbose) {
     show_cols_spec(specs)
   }
 

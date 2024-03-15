@@ -31,20 +31,26 @@ collector_find <- function(name) {
 #' @family parsers
 #' @param x Character vector of elements to parse.
 #' @param collector Column specification.
+#' @param .return_problems Whether to hide the `problems` tibble from the output
 #' @keywords internal
 #' @export
 #' @examples
 #' x <- c("1", "2", "3", "NA")
 #' parse_vector(x, col_integer())
 #' parse_vector(x, col_double())
-parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
+parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
   stopifnot(is.character(x))
   if (is.character(collector)) {
     collector <- collector_find(collector)
   }
 
   ##  warn_problems(parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws))
-  parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws)
+  res <- parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws)
+  if (.return_problems || is.null(attr(res, "problems"))) {
+      return(res)
+  }
+  attr(res, "problems") <- NULL
+  return(res)
 }
 
 #' Parse logicals, integers, and reals
@@ -65,6 +71,7 @@ parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale
 #'   names.
 #' @param trim_ws Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
 #'     each field before parsing it?
+#' @inheritParams parse_vector
 #' @family parsers
 #' @examples
 #' parse_integer(c("1", "2", "3"))
@@ -84,26 +91,26 @@ NULL
 
 #' @rdname parse_atomic
 #' @export
-parse_logical <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_logical(), na = na, locale = locale, trim_ws = trim_ws)
+parse_logical <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_logical(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
-parse_integer <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_integer(), na = na, locale = locale, trim_ws = trim_ws)
+parse_integer <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_integer(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
-parse_double <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_double(), na = na, locale = locale, trim_ws = trim_ws)
+parse_double <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_double(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
-parse_character <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_character(), na = na, locale = locale, trim_ws = trim_ws)
+parse_character <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_character(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
@@ -166,8 +173,8 @@ col_skip <- function() {
 #' ## Specifying strings for NAs
 #' parse_number(c("1", "2", "3", "NA"))
 #' parse_number(c("1", "2", "3", "NA", "Nothing"), na = c("NA", "Nothing"))
-parse_number <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_number(), na = na, locale = locale, trim_ws = trim_ws)
+parse_number <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_number(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_number
@@ -203,8 +210,9 @@ col_number <- function() {
 #' # ISO 8601 date times
 #' guess_parser(c("2010-10-10"))
 #' parse_guess(c("2010-10-10"))
-parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE) {
-  parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na), na = na, locale = locale, trim_ws = trim_ws)
+parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE, .return_problems = FALSE) {
+    parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na), na = na, locale = locale, trim_ws = trim_ws,
+                 .return_problems = .return_problems)
 }
 
 #' @rdname parse_guess
@@ -262,8 +270,9 @@ guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na
 #' # and reports problems
 #' parse_factor(x, levels = animals)
 parse_factor <- function(x, levels = NULL, ordered = FALSE, na = c("", "NA"),
-                         locale = default_locale(), include_na = TRUE, trim_ws = TRUE) {
-  parse_vector(x, col_factor(levels, ordered, include_na), na = na, locale = locale, trim_ws = trim_ws)
+                         locale = default_locale(), include_na = TRUE, trim_ws = TRUE, .return_problems = FALSE) {
+    parse_vector(x, col_factor(levels, ordered, include_na), na = na, locale = locale, trim_ws = trim_ws,
+                 .return_problems = .return_problems)
 }
 
 #' @rdname parse_factor
@@ -401,20 +410,20 @@ col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
 #' parse_datetime("1979-10-14T1010Z", locale = us_central)
 #' # Your current time zone
 #' parse_datetime("1979-10-14T1010", locale = locale(tz = ""))
-parse_datetime <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_datetime(format), na = na, locale = locale, trim_ws = trim_ws)
+parse_datetime <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_datetime(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
 #' @export
-parse_date <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_date(format), na = na, locale = locale, trim_ws = trim_ws)
+parse_date <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_date(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
 #' @export
-parse_time <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE) {
-  parse_vector(x, col_time(format), na = na, locale = locale, trim_ws = trim_ws)
+parse_time <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
+  parse_vector(x, col_time(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
@@ -877,8 +886,8 @@ as.character.col_spec <- function(x, ...) {
 }
 
 #' @export
-print.col_spec <- function(x, n = Inf, condense = NULL, colour = crayon::has_color(), ...) {
-  cat(format.col_spec(x, n = n, condense = condense, colour = colour, ...))
+print.col_spec <- function(x, n = Inf, condense = NULL, ...) {
+  cat(format.col_spec(x, n = n, condense = condense, ...))
 
   invisible(x)
 }
@@ -894,7 +903,7 @@ cols_condense <- function(x) {
 }
 
 #' @export
-format.col_spec <- function(x, n = Inf, condense = NULL, colour = crayon::has_color(), ...) {
+format.col_spec <- function(x, n = Inf, condense = NULL, ...) {
   if (n == 0) {
     return("")
   }
@@ -929,7 +938,6 @@ format.col_spec <- function(x, n = Inf, condense = NULL, colour = crayon::has_co
         args <- paste(names(args), args, sep = " = ", collapse = ", ")
 
         col_funs <- paste0(col_funs, "(", args, ")")
-        col_funs <- colourise_cols(col_funs, colour)
 
         col_names <- names(cols)[[i]] %||% ""
 
@@ -959,34 +967,6 @@ format.col_spec <- function(x, n = Inf, condense = NULL, colour = crayon::has_co
   out <- paste0(out, "\n)\n")
 
   out
-}
-
-colourise_cols <- function(cols, colourise = crayon::has_color()) {
-  if (!isTRUE(colourise)) {
-    return(cols)
-  }
-
-  fname <- sub("[(].*", "", cols)
-  for (i in seq_along(cols)) {
-    cols[[i]] <- switch(fname,
-      col_skip = ,
-      col_guess = cols[[i]],
-
-      col_character = ,
-      col_factor = crayon::red(cols[[i]]),
-
-      col_logical = crayon::yellow(cols[[i]]),
-
-      col_double = ,
-      col_integer = ,
-      col_number = crayon::green(cols[[i]]),
-
-      col_date = ,
-      col_datetime = ,
-      col_time = crayon::blue(cols[[i]])
-    )
-  }
-  cols
 }
 
 # Used in read_delim(), read_fwf() and type_convert()

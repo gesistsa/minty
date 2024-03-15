@@ -11,13 +11,37 @@
 \alias{col_character}
 \title{Parse logicals, integers, and reals}
 \usage{
-parse_logical(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE)
+parse_logical(
+  x,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE,
+  .return_problems = FALSE
+)
 
-parse_integer(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE)
+parse_integer(
+  x,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE,
+  .return_problems = FALSE
+)
 
-parse_double(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE)
+parse_double(
+  x,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE,
+  .return_problems = FALSE
+)
 
-parse_character(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE)
+parse_character(
+  x,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE,
+  .return_problems = FALSE
+)
 
 col_logical()
 
@@ -41,6 +65,8 @@ names.}
 
 \item{trim_ws}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
 each field before parsing it?}
+
+\item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \description{
 Use \verb{parse_*()} if you have a character vector you want to parse. Use

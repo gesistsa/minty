@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 `readr`'s 1e type inferencing and parsing tools are used by various R packages, e.g. `readODS` and `surveytoolbox`, but ironically those packages do not use the main functions (e.g. `readr::read_delim()`) of `readr`. As explained in the README of `readr`, those 1e code will be eventually removed from `readr`.
 
-`minty` aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages.
+`minty` aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages. If you need to parse interactively, please use either `readr` or `vroom`.
 
 ## Installation
 
@@ -107,3 +107,42 @@ res
 ```{r}
 str(res)
 ```
+
+## Differences: `readr` vs `minty`
+
+Unlike `readr` and `vroom`, please note that `minty` is mainly for **non-interactive usage**. Therefore, `minty` emits fewer messages and warnings than `readr` and `vroom`. 
+
+```{r}
+data <- minty::type_convert(text_only)
+data
+```
+
+```{r}
+data <- readr::type_convert(text_only)
+data
+```
+
+`verbose` option is added if you like those messages, default to `FALSE`.
+
+```{r}
+data <- minty::type_convert(text_only, verbose = TRUE)
+```
+
+At the moment, `minty` does not use [the `problems` mechanism](https://vroom.r-lib.org/reference/problems.html) by default.
+
+```{r}
+minty::parse_logical(c("true", "fake", "IDK"), na = "IDK")
+```
+
+```{r}
+readr::parse_logical(c("true", "fake", "IDK"), na = "IDK")
+```
+
+## Similar packages
+
+For parsing ambiguous date(time)
+
+* [timeless](https://github.com/schochastics/timeless)
+* [anytime](https://github.com/eddelbuettel/anytime)
+
+
