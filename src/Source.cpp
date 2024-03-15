@@ -2,7 +2,6 @@
 #include "cpp11/strings.hpp"
 
 #include "Source.h"
-#include "SourceFile.h"
 #include "SourceRaw.h"
 #include "SourceString.h"
 
@@ -22,11 +21,6 @@ SourcePtr Source::create(const cpp11::list& spec) {
   if (subclass == "source_string") {
     return SourcePtr(
         new SourceString(spec[0], skip, skipEmptyRows, comment, skipQuote));
-  }
-
-  if (subclass == "source_file") {
-    cpp11::strings path(spec[0]);
-    return SourcePtr(new SourceFile(Rf_translateCharUTF8(path[0]), skip, skipEmptyRows, comment, skipQuote));
   }
 
   cpp11::stop("Unknown source type");

@@ -6,52 +6,7 @@
 
 #include "Collector.h"
 #include "LocaleInfo.h"
-#include "Source.h"
-#include "Tokenizer.h"
-#include "TokenizerLine.h"
 #include "Warnings.h"
-
-[[cpp11::register]] cpp11::list guess_header_(
-    const cpp11::list& sourceSpec,
-    const cpp11::list& tokenizerSpec,
-    const cpp11::list& locale_) {
-  Warnings warnings;
-  LocaleInfo locale(locale_);
-  SourcePtr source = Source::create(sourceSpec);
-  TokenizerPtr tokenizer = Tokenizer::create(tokenizerSpec);
-  tokenizer->tokenize(source->begin(), source->end());
-  tokenizer->setWarnings(&warnings);
-
-  CollectorCharacter out(&locale.encoder_);
-  out.setWarnings(&warnings);
-  Token t = tokenizer->nextToken();
-  size_t row_num = t.row();
-
-  size_t max_size = 0;
-  size_t capacity = 0;
-
-  for (; t.type() != TOKEN_EOF && t.row() == row_num;
-       t = tokenizer->nextToken()) {
-    if (t.col() >= max_size) {
-      max_size = t.col();
-    }
-
-    if (max_size >= capacity) {
-      capacity = (max_size + 1) * 2;
-      out.resize(capacity);
-    }
-
-    if (t.type() == TOKEN_STRING) {
-      out.setValue(t.col(), t);
-    }
-  }
-
-  out.resize(max_size + 1);
-
-  using namespace cpp11::literals;
-  return cpp11::writable::list(
-      {"header"_nm = out.vector(), "skip"_nm = source->skippedRows() + 1});
-}
 
 [[cpp11::register]] SEXP parse_vector_(
     const cpp11::strings& x,

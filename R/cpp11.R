@@ -8,10 +8,6 @@ utctime_ <- function(year, month, day, hour, min, sec, psec) {
   .Call(`_minty_utctime_`, year, month, day, hour, min, sec, psec)
 }
 
-guess_header_ <- function(sourceSpec, tokenizerSpec, locale_) {
-  .Call(`_minty_guess_header_`, sourceSpec, tokenizerSpec, locale_)
-}
-
 parse_vector_ <- function(x, collectorSpec, locale_, na, trim_ws) {
   .Call(`_minty_parse_vector_`, x, collectorSpec, locale_, na, trim_ws)
 }
