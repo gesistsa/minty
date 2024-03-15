@@ -12,13 +12,6 @@ extern "C" SEXP _minty_collectorGuess(SEXP input, SEXP locale_, SEXP guessIntege
     return cpp11::as_sexp(collectorGuess(cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(input), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_), cpp11::as_cpp<cpp11::decay_t<bool>>(guessInteger)));
   END_CPP11
 }
-// datetime.cpp
-cpp11::writable::doubles utctime_(const cpp11::integers& year, const cpp11::integers& month, const cpp11::integers& day, const cpp11::integers& hour, const cpp11::integers& min, const cpp11::integers& sec, const cpp11::doubles& psec);
-extern "C" SEXP _minty_utctime_(SEXP year, SEXP month, SEXP day, SEXP hour, SEXP min, SEXP sec, SEXP psec) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(utctime_(cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(year), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(month), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(day), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(hour), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(min), cpp11::as_cpp<cpp11::decay_t<const cpp11::integers&>>(sec), cpp11::as_cpp<cpp11::decay_t<const cpp11::doubles&>>(psec)));
-  END_CPP11
-}
 // parse.cpp
 SEXP parse_vector_(const cpp11::strings& x, const cpp11::list& collectorSpec, const cpp11::list& locale_, const std::vector<std::string>& na, bool trim_ws);
 extern "C" SEXP _minty_parse_vector_(SEXP x, SEXP collectorSpec, SEXP locale_, SEXP na, SEXP trim_ws) {
@@ -39,7 +32,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_minty_collectorGuess",   (DL_FUNC) &_minty_collectorGuess,   3},
     {"_minty_parse_vector_",    (DL_FUNC) &_minty_parse_vector_,    5},
     {"_minty_type_convert_col", (DL_FUNC) &_minty_type_convert_col, 6},
-    {"_minty_utctime_",         (DL_FUNC) &_minty_utctime_,         7},
     {NULL, NULL, 0}
 };
 }

@@ -4,10 +4,6 @@ collectorGuess <- function(input, locale_, guessInteger) {
   .Call(`_minty_collectorGuess`, input, locale_, guessInteger)
 }
 
-utctime_ <- function(year, month, day, hour, min, sec, psec) {
-  .Call(`_minty_utctime_`, year, month, day, hour, min, sec, psec)
-}
-
 parse_vector_ <- function(x, collectorSpec, locale_, na, trim_ws) {
   .Call(`_minty_parse_vector_`, x, collectorSpec, locale_, na, trim_ws)
 }
