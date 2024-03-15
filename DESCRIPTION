@@ -29,5 +29,8 @@ Imports:
 Suggests: 
     knitr,
     stringi,
-    testthat
+    testthat,
+    withr,
+    hms
+
 
