@@ -917,13 +917,7 @@ col_concise <- function(x) {
 
 col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
                                  guessed_types = NULL,
-                                 comment = "",
-                                 skip = 0, skip_empty_rows = TRUE,
-                                 skip_quote = TRUE,
-                                 guess_max = 1000,
-                                 ## tokenizer = tokenizer_csv(),
-                                 tokenizer = NULL,
-                                 locale = default_locale(),
+                                 skip = 0,
                                  drop_skipped_names = FALSE) {
 
     guessed_names <- FALSE ### For our use case, col_names is always character
