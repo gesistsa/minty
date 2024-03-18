@@ -45,9 +45,7 @@ each field before parsing it?}
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \description{
-\code{parse_factor()} is similar to \code{\link[=factor]{factor()}}, but generates a warning if
-\code{levels} have been specified and some elements of \code{x} are not found in those
-\code{levels}.
+\code{parse_factor()} is similar to \code{\link[=factor]{factor()}}.
 }
 \examples{
 # discover the levels from the data

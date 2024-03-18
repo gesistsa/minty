@@ -18,7 +18,7 @@ type_convert(
 \item{df}{A data frame.}
 
 \item{col_types}{One of \code{NULL}, a \code{\link[=cols]{cols()}} specification, or
-a string. See \code{vignette("readr")} for more details.
+a string.
 
 If \code{NULL}, column types will be imputed using all rows.}
 
@@ -46,9 +46,7 @@ then let readr take another stab at parsing it. The name is a homage to
 the base \code{\link[utils:type.convert]{utils::type.convert()}}.
 }
 \note{
-\code{type_convert()} removes a 'spec' attribute,
-because it likely modifies the column data types.
-(see \code{\link[=spec]{spec()}} for more information about column specifications).
+\code{type_convert()} removes a 'spec' attribute (if it presents).
 }
 \examples{
 df <- data.frame(

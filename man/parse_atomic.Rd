@@ -69,9 +69,7 @@ each field before parsing it?}
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
 \description{
-Use \verb{parse_*()} if you have a character vector you want to parse. Use
-\verb{col_*()} in conjunction with a \verb{read_*()} function to parse the
-values as they're read in.
+Use \verb{parse_*()} if you have a character vector you want to parse.
 }
 \examples{
 parse_integer(c("1", "2", "3"))
