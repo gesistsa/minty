@@ -28,83 +28,83 @@
 type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
                          locale = default_locale(), guess_integer = FALSE,
                          verbose = FALSE) {
-  stopifnot(is.data.frame(df))
-  is_character <- vapply(df, is.character, logical(1))
+    stopifnot(is.data.frame(df))
+    is_character <- vapply(df, is.character, logical(1))
 
-  if (!any(is_character)) {
-    warning("`type_convert()` only converts columns of type 'character'.\n- `df` has no columns of type 'character'", call. = FALSE)
-  }
+    if (!any(is_character)) {
+        warning("`type_convert()` only converts columns of type 'character'.\n- `df` has no columns of type 'character'", call. = FALSE)
+    }
 
-  char_cols <- df[is_character]
+    char_cols <- df[is_character]
 
-  col_types <- keep_character_col_types(df, col_types)
+    col_types <- keep_character_col_types(df, col_types)
 
-  guesses <- lapply(
-    char_cols,
-    guess_parser,
-    locale = locale,
-    na = na,
-    guess_integer = guess_integer
-  )
-
-  specs <- col_spec_standardise(
-    col_types = col_types,
-    col_names = names(char_cols),
-    guessed_types = guesses
-  )
-
-  if (is.null(col_types) && verbose) {
-    show_cols_spec(specs)
-  }
-
-  df[is_character] <- lapply(seq_along(char_cols), function(i) {
-    type_convert_col(char_cols[[i]], specs$cols[[i]], which(is_character)[i],
-      locale_ = locale, na = na, trim_ws = trim_ws
+    guesses <- lapply(
+        char_cols,
+        guess_parser,
+        locale = locale,
+        na = na,
+        guess_integer = guess_integer
     )
-  })
 
-  attr(df, "spec") <- NULL
+    specs <- col_spec_standardise(
+        col_types = col_types,
+        col_names = names(char_cols),
+        guessed_types = guesses
+    )
 
-  df
+    if (is.null(col_types) && verbose) {
+        show_cols_spec(specs)
+    }
+
+    df[is_character] <- lapply(seq_along(char_cols), function(i) {
+        type_convert_col(char_cols[[i]], specs$cols[[i]], which(is_character)[i],
+                         locale_ = locale, na = na, trim_ws = trim_ws
+                         )
+    })
+
+    attr(df, "spec") <- NULL
+
+    df
 }
 
 keep_character_col_types <- function(df, col_types) {
-  if (is.null(col_types)) {
-    return(col_types)
-  }
-
-  is_character <- vapply(df, is.character, logical(1))
-  if (is.character(col_types)) {
-    if (length(col_types) != 1) {
-      stop("`col_types` must be a single string.", call. = FALSE)
-    }
-    if (nchar(col_types) != length(df)) {
-      stop(
-        "`df` and `col_types` must have consistent lengths:\n",
-        "  * `df` has length ", length(df), "\n",
-        "  * `col_types` has length ", nchar(col_types),
-        call. = FALSE
-      )
+    if (is.null(col_types)) {
+        return(col_types)
     }
 
-    idx <- which(is_character)
-    col_types <- paste(substring(col_types, idx, idx), collapse = "")
-    return(col_types)
-  }
+    is_character <- vapply(df, is.character, logical(1))
+    if (is.character(col_types)) {
+        if (length(col_types) != 1) {
+            stop("`col_types` must be a single string.", call. = FALSE)
+        }
+        if (nchar(col_types) != length(df)) {
+            stop(
+                "`df` and `col_types` must have consistent lengths:\n",
+                "  * `df` has length ", length(df), "\n",
+                "  * `col_types` has length ", nchar(col_types),
+                call. = FALSE
+            )
+        }
 
-  char_cols <- names(df)[is_character]
-  col_types$cols <- col_types$cols[names(col_types$cols) %in% char_cols]
+        idx <- which(is_character)
+        col_types <- paste(substring(col_types, idx, idx), collapse = "")
+        return(col_types)
+    }
 
-  col_types
+    char_cols <- names(df)[is_character]
+    col_types$cols <- col_types$cols[names(col_types$cols) %in% char_cols]
+
+    col_types
 }
 
-# For printing optional messages
+## For printing optional messages
 show_cols_spec <- function(spec, n = getOption("readr.num_columns", 20)) {
     if (n > 0) {
         message("Column specification: ")
         message(strsplit(format_col_spec(spec, n = n, condense = NULL), "\n")[[1]])
         if (length(spec$cols) >= n) {
             message("Only the first ", n, " columns are printed.", "\n")
-      }        
+        }
     }
 }

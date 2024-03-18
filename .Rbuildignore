@@ -2,3 +2,4 @@
 ^LICENSE\.md$
 ^src/.clang-format$
 ^\.github$
+^.editorconfig$

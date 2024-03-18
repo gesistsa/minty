@@ -8,17 +8,16 @@
 NULL
 
 collector <- function(type, ...) {
-  structure(list(...), class = c(paste0("collector_", type), "collector"))
+    structure(list(...), class = c(paste0("collector_", type), "collector"))
 }
 
 is.collector <- function(x) inherits(x, "collector")
 
 collector_find <- function(name) {
-  if (is.na(name)) {
-    return(col_character())
-  }
-
-  get(paste0("col_", name), envir = asNamespace("minty"))()
+    if (is.na(name)) {
+        return(col_character())
+    }
+    get(paste0("col_", name), envir = asNamespace("minty"))()
 }
 
 #' Parse a character vector.
@@ -34,18 +33,18 @@ collector_find <- function(name) {
 #' parse_vector(x, col_integer())
 #' parse_vector(x, col_double())
 parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  stopifnot(is.character(x))
-  if (is.character(collector)) {
-    collector <- collector_find(collector)
-  }
+    stopifnot(is.character(x))
+    if (is.character(collector)) {
+        collector <- collector_find(collector)
+    }
 
-  ##  warn_problems(parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws))
-  res <- parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws)
-  if (.return_problems || is.null(attr(res, "problems"))) {
-      return(res)
-  }
-  attr(res, "problems") <- NULL
-  return(res)
+    ##  warn_problems(parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws))
+    res <- parse_vector_(x, collector, na = na, locale_ = locale, trim_ws = trim_ws)
+    if (.return_problems || is.null(attr(res, "problems"))) {
+        return(res)
+    }
+    attr(res, "problems") <- NULL
+    return(res)
 }
 
 #' Parse logicals, integers, and reals
@@ -85,49 +84,49 @@ NULL
 #' @rdname parse_atomic
 #' @export
 parse_logical <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_logical(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_logical(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
 parse_integer <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_integer(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_integer(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
 parse_double <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_double(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_double(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
 parse_character <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_character(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_character(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_atomic
 #' @export
 col_logical <- function() {
-  collector("logical")
+    collector("logical")
 }
 
 #' @rdname parse_atomic
 #' @export
 col_integer <- function() {
-  collector("integer")
+    collector("integer")
 }
 
 #' @rdname parse_atomic
 #' @export
 col_double <- function() {
-  collector("double")
+    collector("double")
 }
 
 #' @rdname parse_atomic
 #' @export
 col_character <- function() {
-  collector("character")
+    collector("character")
 }
 
 #' Skip a column
@@ -138,7 +137,7 @@ col_character <- function() {
 #' @family parsers
 #' @export
 col_skip <- function() {
-  collector("skip")
+    collector("skip")
 }
 
 #' Parse numbers, flexibly
@@ -167,13 +166,13 @@ col_skip <- function() {
 #' parse_number(c("1", "2", "3", "NA"))
 #' parse_number(c("1", "2", "3", "NA", "Nothing"), na = c("NA", "Nothing"))
 parse_number <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_number(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_number(), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_number
 #' @export
 col_number <- function() {
-  collector("number")
+    collector("number")
 }
 
 
@@ -210,15 +209,15 @@ parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws 
 #' @rdname parse_guess
 #' @export
 col_guess <- function() {
-  collector("guess")
+    collector("guess")
 }
 
 guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA")) {
-  x[x %in% na] <- NA_character_
+    x[x %in% na] <- NA_character_
 
-  stopifnot(is.locale(locale))
+    stopifnot(is.locale(locale))
 
-  collectorGuess(x, locale, guessInteger = guess_integer)
+    collectorGuess(x, locale, guessInteger = guess_integer)
 }
 
 #' Parse factors
@@ -264,13 +263,13 @@ parse_factor <- function(x, levels = NULL, ordered = FALSE, na = c("", "NA"),
 #' @rdname parse_factor
 #' @export
 col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
-  if (!(is.null(levels) || is.character(levels))) {
-    stop(sprintf("`levels` must be `NULL` or a character vector:\n- `levels` is a '%s'", class(levels)), call. = FALSE)
-  }
-  collector("factor", levels = levels, ordered = ordered, include_na = include_na)
+    if (!(is.null(levels) || is.character(levels))) {
+        stop(sprintf("`levels` must be `NULL` or a character vector:\n- `levels` is a '%s'", class(levels)), call. = FALSE)
+    }
+    collector("factor", levels = levels, ordered = ordered, include_na = include_na)
 }
 
-# More complex ------------------------------------------------------------
+## More complex ------------------------------------------------------------
 
 #' Parse date/times
 #'
@@ -397,37 +396,37 @@ col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
 #' # Your current time zone
 #' parse_datetime("1979-10-14T1010", locale = locale(tz = ""))
 parse_datetime <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_datetime(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_datetime(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
 #' @export
 parse_date <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_date(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_date(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
 #' @export
 parse_time <- function(x, format = "", na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, .return_problems = FALSE) {
-  parse_vector(x, col_time(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
+    parse_vector(x, col_time(format), na = na, locale = locale, trim_ws = trim_ws, .return_problems = .return_problems)
 }
 
 #' @rdname parse_datetime
 #' @export
 col_datetime <- function(format = "") {
-  collector("datetime", format = format)
+    collector("datetime", format = format)
 }
 
 #' @rdname parse_datetime
 #' @export
 col_date <- function(format = "") {
-  collector("date", format = format)
+    collector("date", format = format)
 }
 
 #' @rdname parse_datetime
 #' @export
 col_time <- function(format = "") {
-  collector("time", format = format)
+    collector("time", format = format)
 }
 
 ## Locale
@@ -476,44 +475,44 @@ locale <- function(date_names = "en",
                    decimal_mark = ".", grouping_mark = ",",
                    tz = "UTC", encoding = "UTF-8",
                    asciify = FALSE) {
-  if (is.character(date_names)) {
-    date_names <- date_names_lang(date_names)
-  }
-  stopifnot(is.date_names(date_names))
-  if (asciify && !requireNamespace("stringi", quietly = TRUE)) {
-      asciify <- FALSE
-  }
-  if (asciify) {
-    date_names[] <- lapply(date_names, stringi::stri_trans_general, id = "latin-ascii")
-  }
+    if (is.character(date_names)) {
+        date_names <- date_names_lang(date_names)
+    }
+    stopifnot(is.date_names(date_names))
+    if (asciify && !requireNamespace("stringi", quietly = TRUE)) {
+        asciify <- FALSE
+    }
+    if (asciify) {
+        date_names[] <- lapply(date_names, stringi::stri_trans_general, id = "latin-ascii")
+    }
 
-  if (missing(grouping_mark) && !missing(decimal_mark)) {
-    grouping_mark <- if (decimal_mark == ".") "," else "."
-  } else if (missing(decimal_mark) && !missing(grouping_mark)) {
-    decimal_mark <- if (grouping_mark == ".") "," else "."
-  }
+    if (missing(grouping_mark) && !missing(decimal_mark)) {
+        grouping_mark <- if (decimal_mark == ".") "," else "."
+    } else if (missing(decimal_mark) && !missing(grouping_mark)) {
+        decimal_mark <- if (grouping_mark == ".") "," else "."
+    }
 
-  stopifnot(decimal_mark %in% c(".", ","))
-  check_string(grouping_mark)
-  if (decimal_mark == grouping_mark) {
-    stop("`decimal_mark` and `grouping_mark` must be different", call. = FALSE)
-  }
+    stopifnot(decimal_mark %in% c(".", ","))
+    check_string(grouping_mark)
+    if (decimal_mark == grouping_mark) {
+        stop("`decimal_mark` and `grouping_mark` must be different", call. = FALSE)
+    }
 
-  tz <- check_tz(tz)
-  check_encoding(encoding)
+    tz <- check_tz(tz)
+    check_encoding(encoding)
 
-  structure(
-    list(
-      date_names = date_names,
-      date_format = date_format,
-      time_format = time_format,
-      decimal_mark = decimal_mark,
-      grouping_mark = grouping_mark,
-      tz = tz,
-      encoding = encoding
-    ),
-    class = "locale"
-  )
+    structure(
+        list(
+            date_names = date_names,
+            date_format = date_format,
+            time_format = time_format,
+            decimal_mark = decimal_mark,
+            grouping_mark = grouping_mark,
+            tz = tz,
+            encoding = encoding
+        ),
+        class = "locale"
+    )
 }
 
 is.locale <- function(x) inherits(x, "locale")
@@ -521,41 +520,41 @@ is.locale <- function(x) inherits(x, "locale")
 #' @export
 #' @rdname locale
 default_locale <- function() {
-  loc <- getOption("readr.default_locale")
-  if (is.null(loc)) {
-    loc <- locale()
-    options("readr.default_locale" = loc)
-  }
+    loc <- getOption("readr.default_locale")
+    if (is.null(loc)) {
+        loc <- locale()
+        options("readr.default_locale" = loc)
+    }
 
-  loc
+    loc
 }
 
 check_tz <- function(x) {
-  check_string(x, nm = "tz")
+    check_string(x, nm = "tz")
 
-  if (identical(x, "")) {
-    x <- Sys.timezone()
+    if (identical(x, "")) {
+        x <- Sys.timezone()
 
-    if (identical(x, "") || identical(x, NA_character_)) {
-      x <- "UTC"
+        if (identical(x, "") || identical(x, NA_character_)) {
+            x <- "UTC"
+        }
     }
-  }
 
-  if (x %in% tzdb::tzdb_names()) {
-    x
-  } else {
-    stop("Unknown TZ ", x, call. = FALSE)
-  }
+    if (x %in% tzdb::tzdb_names()) {
+        x
+    } else {
+        stop("Unknown TZ ", x, call. = FALSE)
+    }
 }
 
 check_encoding <- function(x) {
-  check_string(x, nm = "encoding")
+    check_string(x, nm = "encoding")
 
-  if (tolower(x) %in% tolower(iconvlist())) {
-    return(TRUE)
-  }
+    if (tolower(x) %in% tolower(iconvlist())) {
+        return(TRUE)
+    }
 
-  stop("Unknown encoding ", x, call. = FALSE)
+    stop("Unknown encoding ", x, call. = FALSE)
 }
 
 ## datetime
@@ -577,21 +576,21 @@ check_encoding <- function(x) {
 #' date_names_lang("fr")
 date_names <- function(mon, mon_ab = mon, day, day_ab = day,
                        am_pm = c("AM", "PM")) {
-  stopifnot(is.character(mon), length(mon) == 12)
-  stopifnot(is.character(mon_ab), length(mon_ab) == 12)
-  stopifnot(is.character(day), length(day) == 7)
-  stopifnot(is.character(day_ab), length(day_ab) == 7)
+    stopifnot(is.character(mon), length(mon) == 12)
+    stopifnot(is.character(mon_ab), length(mon_ab) == 12)
+    stopifnot(is.character(day), length(day) == 7)
+    stopifnot(is.character(day_ab), length(day_ab) == 7)
 
-  structure(
-    list(
-      mon = enc2utf8(mon),
-      mon_ab = enc2utf8(mon_ab),
-      day = enc2utf8(day),
-      day_ab = enc2utf8(day_ab),
-      am_pm = enc2utf8(am_pm)
-    ),
-    class = "date_names"
-  )
+    structure(
+        list(
+            mon = enc2utf8(mon),
+            mon_ab = enc2utf8(mon_ab),
+            day = enc2utf8(day),
+            day_ab = enc2utf8(day_ab),
+            am_pm = enc2utf8(am_pm)
+        ),
+        class = "date_names"
+    )
 }
 
 #' @export
@@ -600,27 +599,27 @@ date_names <- function(mon, mon_ab = mon, day, day_ab = day,
 #'   e.g. `"en"` for American English. See `date_names_langs()`
 #'   for a complete list of available locales.
 date_names_lang <- function(language) {
-  check_string(language)
+    check_string(language)
 
-  symbols <- date_symbols[[language]]
-  if (is.null(symbols)) {
-    stop("Unknown language '", language, "'", call. = FALSE)
-  }
+    symbols <- date_symbols[[language]]
+    if (is.null(symbols)) {
+        stop("Unknown language '", language, "'", call. = FALSE)
+    }
 
-  symbols
+    symbols
 }
 
 #' @export
 #' @rdname date_names
 date_names_langs <- function() {
-  names(date_symbols)
+    names(date_symbols)
 }
 
 is.date_names <- function(x) inherits(x, "date_names")
 
 cat_wrap <- function(header, body) {
-  body <- strwrap(body, exdent = nchar(header))
-  cat(header, paste(body, collapse = "\n"), "\n", sep = "")
+    body <- strwrap(body, exdent = nchar(header))
+    cat(header, paste(body, collapse = "\n"), "\n", sep = "")
 }
 
 ## col_spec
@@ -683,7 +682,7 @@ cols <- function(..., .default = col_guess()) {
     is_character <- vapply(col_types, is.character, logical(1))
     col_types[is_character] <- lapply(col_types[is_character], col_concise)
     if (is.character(.default)) {
-      .default <- col_concise(.default)
+        .default <- col_concise(.default)
     }
     return(col_spec(col_types, .default))
 }
@@ -691,31 +690,31 @@ cols <- function(..., .default = col_guess()) {
 #' @export
 #' @rdname cols
 cols_only <- function(...) {
-  cols(..., .default = col_skip())
+    cols(..., .default = col_skip())
 }
 
 
-# col_spec ----------------------------------------------------------------
+## col_spec ----------------------------------------------------------------
 
 col_spec <- function(col_types, default = col_guess()) {
-  stopifnot(is.list(col_types))
-  stopifnot(is.collector(default))
+    stopifnot(is.list(col_types))
+    stopifnot(is.collector(default))
 
-  is_collector <- vapply(col_types, is.collector, logical(1))
-  if (any(!is_collector)) {
-    stop("Some `col_types` are not S3 collector objects: ",
-      paste(which(!is_collector), collapse = ", "),
-      call. = FALSE
+    is_collector <- vapply(col_types, is.collector, logical(1))
+    if (any(!is_collector)) {
+        stop("Some `col_types` are not S3 collector objects: ",
+             paste(which(!is_collector), collapse = ", "),
+             call. = FALSE
+             )
+    }
+
+    structure(
+        list(
+            cols = col_types,
+            default = default
+        ),
+        class = "col_spec"
     )
-  }
-
-  structure(
-    list(
-      cols = col_types,
-      default = default
-    ),
-    class = "col_spec"
-  )
 }
 
 is.col_spec <- function(x) inherits(x, "col_spec")
@@ -732,188 +731,188 @@ is.col_spec <- function(x) inherits(x, "col_spec")
 as.col_spec <- function(x) UseMethod("as.col_spec")
 #' @export
 as.col_spec.character <- function(x) {
-  if (is_named(x)) {
-    return(as.col_spec(as.list(x)))
-  }
-  letters <- strsplit(x, "")[[1]]
-  col_spec(lapply(letters, col_concise), col_guess())
+    if (is_named(x)) {
+        return(as.col_spec(as.list(x)))
+    }
+    letters <- strsplit(x, "")[[1]]
+    col_spec(lapply(letters, col_concise), col_guess())
 }
 
 #' @export
 as.col_spec.NULL <- function(x) {
-  col_spec(list())
+    col_spec(list())
 }
 
 #' @export
 as.col_spec.list <- function(x) {
-  do.call(cols, x)
+    do.call(cols, x)
 }
 #' @export
 as.col_spec.col_spec <- function(x) x
 
 #' @export
 as.col_spec.default <- function(x) {
-  stop("`col_types` must be NULL, a list or a string", call. = FALSE)
+    stop("`col_types` must be NULL, a list or a string", call. = FALSE)
 }
 
 type_to_col <- function(x, ...) {
-  UseMethod("type_to_col")
+    UseMethod("type_to_col")
 }
 
 #' @export
 type_to_col.default <- function(x, ...) {
-  col_character()
+    col_character()
 }
 
 #' @export
 type_to_col.logical <- function(x, ...) {
-  col_logical()
+    col_logical()
 }
 
 #' @export
 type_to_col.integer <- function(x, ...) {
-  col_integer()
+    col_integer()
 }
 
 #' @export
 type_to_col.double <- function(x, ...) {
-  col_double()
+    col_double()
 }
 
 #' @export
 type_to_col.factor <- function(x, ...) {
-  col_factor(levels = levels(x), ordered = is.ordered(x), include_na = any(is.na(levels(x))))
+    col_factor(levels = levels(x), ordered = is.ordered(x), include_na = any(is.na(levels(x))))
 }
 
 #' @export
 type_to_col.Date <- function(x, ...) {
-  col_date()
+    col_date()
 }
 
 #' @export
 type_to_col.POSIXct <- function(x, ...) {
-  col_datetime()
+    col_datetime()
 }
 
 #' @export
 type_to_col.hms <- function(x, ...) {
-  col_time()
+    col_time()
 }
 
 #' @export
 as.col_spec.data.frame <- function(x) {
-  as.col_spec(lapply(x, type_to_col))
+    as.col_spec(lapply(x, type_to_col))
 }
 
 col_to_short <- function(x, ...) {
-  switch(class(x)[[1]],
-    collector_character = "c",
-    collector_date = "D",
-    collector_datetime = "T",
-    collector_double = "d",
-    collector_factor = "f",
-    collector_guess = "?",
-    collector_integer = "i",
-    collector_logical = "l",
-    collector_number = "n",
-    collector_skip = "-",
-    collector_time = "t"
-  )
+    switch(class(x)[[1]],
+           collector_character = "c",
+           collector_date = "D",
+           collector_datetime = "T",
+           collector_double = "d",
+           collector_factor = "f",
+           collector_guess = "?",
+           collector_integer = "i",
+           collector_logical = "l",
+           collector_number = "n",
+           collector_skip = "-",
+           collector_time = "t"
+           )
 }
 
 cols_condense <- function(x) {
-  types <- vapply(x$cols, function(xx) class(xx)[[1]], character(1))
-  counts <- table(types)
-  most_common <- names(counts)[counts == max(counts)][[1]]
+    types <- vapply(x$cols, function(xx) class(xx)[[1]], character(1))
+    counts <- table(types)
+    most_common <- names(counts)[counts == max(counts)][[1]]
 
-  x$default <- x$cols[types == most_common][[1]]
-  x$cols <- x$cols[types != most_common]
-  x
+    x$default <- x$cols[types == most_common][[1]]
+    x$cols <- x$cols[types != most_common]
+    x
 }
 
 ## Change from S3
 format_col_spec <- function(x, n = Inf, condense = NULL, ...) {
-  if (n == 0) {
-    return("")
-  }
+    if (n == 0) {
+        return("")
+    }
 
-  # condense if cols >= n
-  condense <- condense %||% (length(x$cols) >= n)
-  if (isTRUE(condense)) {
-    x <- cols_condense(x)
-  }
+    ## condense if cols >= n
+    condense <- condense %||% (length(x$cols) >= n)
+    if (isTRUE(condense)) {
+        x <- cols_condense(x)
+    }
 
-  # truncate to minumum of n or length
-  cols <- x$cols[seq_len(min(length(x$cols), n))]
+    ## truncate to minumum of n or length
+    cols <- x$cols[seq_len(min(length(x$cols), n))]
 
-  default <- NULL
-  if (inherits(x$default, "collector_guess")) {
-    fun_type <- "cols"
-  } else if (inherits(x$default, "collector_skip")) {
-    fun_type <- "cols_only"
-  } else {
-    fun_type <- "cols"
-    type <- sub("^collector_", "", class(x$default)[[1]])
-    default <- paste0(".default = col_", type, "()")
-  }
+    default <- NULL
+    if (inherits(x$default, "collector_guess")) {
+        fun_type <- "cols"
+    } else if (inherits(x$default, "collector_skip")) {
+        fun_type <- "cols_only"
+    } else {
+        fun_type <- "cols"
+        type <- sub("^collector_", "", class(x$default)[[1]])
+        default <- paste0(".default = col_", type, "()")
+    }
 
-  cols_args <- c(
-    default,
-    vapply(
-      seq_along(cols),
-      function(i) {
-        col_funs <- sub("^collector_", "col_", class(cols[[i]])[[1]])
-        args <- vapply(cols[[i]], deparse2, character(1), sep = "\n    ")
-        args <- paste(names(args), args, sep = " = ", collapse = ", ")
+    cols_args <- c(
+        default,
+        vapply(
+            seq_along(cols),
+            function(i) {
+                col_funs <- sub("^collector_", "col_", class(cols[[i]])[[1]])
+                args <- vapply(cols[[i]], deparse2, character(1), sep = "\n    ")
+                args <- paste(names(args), args, sep = " = ", collapse = ", ")
 
-        col_funs <- paste0(col_funs, "(", args, ")")
+                col_funs <- paste0(col_funs, "(", args, ")")
 
-        col_names <- names(cols)[[i]] %||% ""
+                col_names <- names(cols)[[i]] %||% ""
 
-        # Need to handle unnamed columns and columns with non-syntactic names
-        named <- col_names != ""
+                ## Need to handle unnamed columns and columns with non-syntactic names
+                named <- col_names != ""
 
-        non_syntactic <- !is_syntactic(col_names) & named
-        col_names[non_syntactic] <- paste0("`", gsub("`", "\\\\`", col_names[non_syntactic]), "`")
+                non_syntactic <- !is_syntactic(col_names) & named
+                col_names[non_syntactic] <- paste0("`", gsub("`", "\\\\`", col_names[non_syntactic]), "`")
 
-        out <- paste0(col_names, " = ", col_funs)
-        out[!named] <- col_funs[!named]
-        out
-      },
-      character(1)
+                out <- paste0(col_names, " = ", col_funs)
+                out[!named] <- col_funs[!named]
+                out
+            },
+            character(1)
+        )
     )
-  )
-  if (length(x$cols) == 0 && length(cols_args) == 0) {
-    return(paste0(fun_type, "()\n"))
-  }
+    if (length(x$cols) == 0 && length(cols_args) == 0) {
+        return(paste0(fun_type, "()\n"))
+    }
 
 
-  out <- paste0(fun_type, "(\n  ", paste(collapse = ",\n  ", cols_args))
+    out <- paste0(fun_type, "(\n  ", paste(collapse = ",\n  ", cols_args))
 
-  if (length(x$cols) > n) {
-    out <- paste0(out, "\n  # ... with ", length(x$cols) - n, " more columns")
-  }
-  out <- paste0(out, "\n)\n")
+    if (length(x$cols) > n) {
+        out <- paste0(out, "\n  # ... with ", length(x$cols) - n, " more columns")
+    }
+    out <- paste0(out, "\n)\n")
 
-  out
+    out
 }
 
 col_concise <- function(x) {
-  switch(x,
-    "_" = ,
-    "-" = col_skip(),
-    "?" = col_guess(),
-    c = col_character(),
-    f = col_factor(),
-    d = col_double(),
-    i = col_integer(),
-    l = col_logical(),
-    n = col_number(),
-    D = col_date(),
-    T = col_datetime(),
-    t = col_time(),
-    stop("Unknown shortcut: ", x, call. = FALSE)
-  )
+    switch(x,
+           "_" = ,
+           "-" = col_skip(),
+           "?" = col_guess(),
+           c = col_character(),
+           f = col_factor(),
+           d = col_double(),
+           i = col_integer(),
+           l = col_logical(),
+           n = col_number(),
+           D = col_date(),
+           T = col_datetime(),
+           t = col_time(),
+           stop("Unknown shortcut: ", x, call. = FALSE)
+           )
 }
 
 col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
@@ -929,169 +928,169 @@ col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
 
     guessed_names <- FALSE ### For our use case, col_names is always character
 
-  missing_names <- is.na(col_names)
-  if (any(missing_names)) {
-    new_names <- paste0("X", seq_along(col_names)[missing_names])
-    col_names[missing_names] <- new_names
-    warning(
-      "Missing column names filled in: ",
-      paste0(
-        encodeString(new_names, quote = "'"),
-        " [", which(missing_names), "]",
-        collapse = ", "
-      ),
-      call. = FALSE
-    )
-  }
-
-  if (anyDuplicated(col_names)) {
-    dups <- duplicated(col_names)
-
-    old_names <- col_names
-    col_names <- make.unique(col_names, sep = "_")
-
-    warning(
-      "Duplicated column names deduplicated: ",
-      paste0(
-        encodeString(old_names[dups], quote = "'"),
-        " => ",
-        encodeString(col_names[dups], quote = "'"),
-        " [", which(dups), "]",
-        collapse = ", "
-      ),
-      call. = FALSE
-    )
-  }
-
-  # Figure out column types ----------------------------------------------------
-
-  spec <- as.col_spec(col_types)
-  type_names <- names(spec$cols)
-
-  spec$skip <- skip
-
-  if (length(spec$cols) == 0) {
-    # no types specified so use defaults
-
-    spec$cols <- rep(list(spec$default), length(col_names))
-    names(spec$cols) <- col_names
-  } else if (is.null(type_names) && guessed_names) {
-    # unnamed types & names guessed from header: match exactly
-
-    if (length(spec$cols) != length(col_names)) {
-      warning("Unnamed `col_types` should have the same length as `col_names`. ",
-        "Using smaller of the two.",
-        call. = FALSE
-      )
-      n <- min(length(col_names), length(spec$cols))
-      spec$cols <- spec$cols[seq_len(n)]
-      col_names <- col_names[seq_len(n)]
+    missing_names <- is.na(col_names)
+    if (any(missing_names)) {
+        new_names <- paste0("X", seq_along(col_names)[missing_names])
+        col_names[missing_names] <- new_names
+        warning(
+            "Missing column names filled in: ",
+            paste0(
+                encodeString(new_names, quote = "'"),
+                " [", which(missing_names), "]",
+                collapse = ", "
+            ),
+            call. = FALSE
+        )
     }
 
-    names(spec$cols) <- col_names
-  } else if (is.null(type_names) && !guessed_names) {
-    # unnamed types & names supplied: match non-skipped columns
-    skipped <- vapply(spec$cols, inherits, "collector_skip",
-      FUN.VALUE = logical(1)
-    )
+    if (anyDuplicated(col_names)) {
+        dups <- duplicated(col_names)
 
-    # Needed for read_fwf() because width generator functions have name for
-    # every column, even those that are skipped. Not need for read_delim()
-    if (drop_skipped_names) {
-      col_names <- col_names[!skipped]
+        old_names <- col_names
+        col_names <- make.unique(col_names, sep = "_")
+
+        warning(
+            "Duplicated column names deduplicated: ",
+            paste0(
+                encodeString(old_names[dups], quote = "'"),
+                " => ",
+                encodeString(col_names[dups], quote = "'"),
+                " [", which(dups), "]",
+                collapse = ", "
+            ),
+            call. = FALSE
+        )
     }
 
-    n_read <- sum(!skipped)
-    n_names <- length(col_names)
+    ## Figure out column types ----------------------------------------------------
 
-    n_new <- abs(n_names - n_read)
-    if (n_read < n_names) {
-      warning("Insufficient `col_types`. Guessing ", n_new, " columns.",
-        call. = FALSE
-      )
-      spec$cols <- c(spec$cols, list(rep(col_guess(), n_new)))
-    } else if (n_read > n_names) {
-      warning("Insufficient `col_names`. Adding ", n_new, " names.",
-        call. = FALSE
-      )
+    spec <- as.col_spec(col_types)
+    type_names <- names(spec$cols)
 
-      col_names2 <- rep("", length(spec$cols))
-      col_names2[!skipped] <- c(col_names, paste0("X", seq_len(n_new) + n_names))
-      col_names <- col_names2
+    spec$skip <- skip
+
+    if (length(spec$cols) == 0) {
+        ## no types specified so use defaults
+
+        spec$cols <- rep(list(spec$default), length(col_names))
+        names(spec$cols) <- col_names
+    } else if (is.null(type_names) && guessed_names) {
+        ## unnamed types & names guessed from header: match exactly
+
+        if (length(spec$cols) != length(col_names)) {
+            warning("Unnamed `col_types` should have the same length as `col_names`. ",
+                    "Using smaller of the two.",
+                    call. = FALSE
+                    )
+            n <- min(length(col_names), length(spec$cols))
+            spec$cols <- spec$cols[seq_len(n)]
+            col_names <- col_names[seq_len(n)]
+        }
+
+        names(spec$cols) <- col_names
+    } else if (is.null(type_names) && !guessed_names) {
+        ## unnamed types & names supplied: match non-skipped columns
+        skipped <- vapply(spec$cols, inherits, "collector_skip",
+                          FUN.VALUE = logical(1)
+                          )
+
+        ## Needed for read_fwf() because width generator functions have name for
+        ## every column, even those that are skipped. Not need for read_delim()
+        if (drop_skipped_names) {
+            col_names <- col_names[!skipped]
+        }
+
+        n_read <- sum(!skipped)
+        n_names <- length(col_names)
+
+        n_new <- abs(n_names - n_read)
+        if (n_read < n_names) {
+            warning("Insufficient `col_types`. Guessing ", n_new, " columns.",
+                    call. = FALSE
+                    )
+            spec$cols <- c(spec$cols, list(rep(col_guess(), n_new)))
+        } else if (n_read > n_names) {
+            warning("Insufficient `col_names`. Adding ", n_new, " names.",
+                    call. = FALSE
+                    )
+
+            col_names2 <- rep("", length(spec$cols))
+            col_names2[!skipped] <- c(col_names, paste0("X", seq_len(n_new) + n_names))
+            col_names <- col_names2
+        } else {
+            col_names2 <- rep("", length(spec$cols))
+            col_names2[!skipped] <- col_names
+            col_names <- col_names2
+        }
+        names(spec$cols) <- col_names
     } else {
-      col_names2 <- rep("", length(spec$cols))
-      col_names2[!skipped] <- col_names
-      col_names <- col_names2
-    }
-    names(spec$cols) <- col_names
-  } else {
-    # names types
+        ## names types
 
-    bad_types <- !(type_names %in% col_names)
-    if (any(bad_types)) {
-      warning("The following named parsers don't match the column names: ",
-        paste0(type_names[bad_types], collapse = ", "),
-        call. = FALSE
-      )
-      spec$cols <- spec$cols[!bad_types]
-      type_names <- type_names[!bad_types]
-    }
+        bad_types <- !(type_names %in% col_names)
+        if (any(bad_types)) {
+            warning("The following named parsers don't match the column names: ",
+                    paste0(type_names[bad_types], collapse = ", "),
+                    call. = FALSE
+                    )
+            spec$cols <- spec$cols[!bad_types]
+            type_names <- type_names[!bad_types]
+        }
 
-    default_types <- !(col_names %in% type_names)
-    if (any(default_types)) {
-      defaults <- rep(list(spec$default), sum(default_types))
-      names(defaults) <- col_names[default_types]
-      spec$cols[names(defaults)] <- defaults
+        default_types <- !(col_names %in% type_names)
+        if (any(default_types)) {
+            defaults <- rep(list(spec$default), sum(default_types))
+            names(defaults) <- col_names[default_types]
+            spec$cols[names(defaults)] <- defaults
+        }
+
+        spec$cols <- spec$cols[col_names]
     }
 
-    spec$cols <- spec$cols[col_names]
-  }
+    ## Guess any types that need to be guessed ------------------------------------
 
-  # Guess any types that need to be guessed ------------------------------------
-
-  is_guess <- vapply(spec$cols, function(x) inherits(x, "collector_guess"), logical(1))
+    is_guess <- vapply(spec$cols, function(x) inherits(x, "collector_guess"), logical(1))
     if (any(is_guess)) {
-      
-    # Need to be careful here: there might be more guesses than types/names
-    guesses <- guessed_types[seq_along(spec$cols)][is_guess]
-    spec$cols[is_guess] <- lapply(guesses, collector_find)
-  }
 
-  spec
+        ## Need to be careful here: there might be more guesses than types/names
+        guesses <- guessed_types[seq_along(spec$cols)][is_guess]
+        spec$cols[is_guess] <- lapply(guesses, collector_find)
+    }
+
+    spec
 }
 
 ## utils
 
 check_string <- function(x, nm = deparse(substitute(x)), optional = FALSE) {
-  if (rlang::is_string(x)) {
-    return()
-  }
-  if (optional && is.null(x)) {
-    return()
-  }
-  stop("`", nm, "` must be a string.", call. = FALSE)
+    if (rlang::is_string(x)) {
+        return()
+    }
+    if (optional && is.null(x)) {
+        return()
+    }
+    stop("`", nm, "` must be a string.", call. = FALSE)
 }
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 deparse2 <- function(expr, ..., sep = "\n") {
-  paste(deparse(expr, ...), collapse = sep)
+    paste(deparse(expr, ...), collapse = sep)
 }
 
 is_syntactic <- function(x) make.names(x) == x
 
 is_named <- function(x) {
-  nms <- names(x)
+    nms <- names(x)
 
-  if (is.null(nms)) {
-    return(FALSE)
-  }
+    if (is.null(nms)) {
+        return(FALSE)
+    }
 
-  all(nms != "" & !is.na(nms))
+    all(nms != "" & !is.na(nms))
 }
 
 POSIXct <- function(x, tz = "UTC") {
-  structure(x, class = c("POSIXct", "POSIXt"), tzone = tz)
+    structure(x, class = c("POSIXct", "POSIXt"), tzone = tz)
 }
 
 ## data symbol creation
@@ -1118,4 +1117,3 @@ POSIXct <- function(x, tz = "UTC") {
 ## names(date_symbols) <- base
 
 ## usethis::use_data(date_symbols, internal = TRUE, overwrite = TRUE)
-
