@@ -7,14 +7,12 @@
 #'
 #' @param df A data frame.
 #' @param col_types One of `NULL`, a [cols()] specification, or
-#'   a string. See `vignette("readr")` for more details.
+#'   a string.
 #'
 #'   If `NULL`, column types will be imputed using all rows.
 #' @param verbose whether to print messages
 #' @inheritParams parse_guess
-#' @note `type_convert()` removes a 'spec' attribute,
-#' because it likely modifies the column data types.
-#' (see [spec()] for more information about column specifications).
+#' @note `type_convert()` removes a 'spec' attribute (if it presents).
 #' @export
 #' @examples
 #' df <- data.frame(
@@ -55,7 +53,6 @@ type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
     guessed_types = guesses
   )
 
-  ## if (is.null(col_types) && !is_testing()) {
   if (is.null(col_types) && verbose) {
     show_cols_spec(specs)
   }
@@ -99,4 +96,15 @@ keep_character_col_types <- function(df, col_types) {
   col_types$cols <- col_types$cols[names(col_types$cols) %in% char_cols]
 
   col_types
+}
+
+# For printing optional messages
+show_cols_spec <- function(spec, n = getOption("readr.num_columns", 20)) {
+    if (n > 0) {
+        message("Column specification: ")
+        message(strsplit(format_col_spec(spec, n = n, condense = NULL), "\n")[[1]])
+        if (length(spec$cols) >= n) {
+            message("Only the first ", n, " columns are printed.", "\n")
+      }        
+    }
 }

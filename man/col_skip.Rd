@@ -7,7 +7,7 @@
 col_skip()
 }
 \description{
-Use this function to ignore a column when reading in a file.
+Use this function to ignore a column when parsing.
 To skip all columns not otherwise specified, use \code{\link[=cols_only]{cols_only()}}.
 }
 \seealso{

@@ -44,8 +44,7 @@ Americans, note that "EST" is a Canadian time zone that does not have
 DST. It is \emph{not} Eastern Standard Time. It's better to use
 "US/Eastern", "US/Central" etc.}
 
-\item{encoding}{Default encoding. This only affects how the file is
-read - readr always converts the output to UTF-8.}
+\item{encoding}{Default encoding (not used in \code{minty}).}
 
 \item{asciify}{Should diacritics be stripped from date names and converted to
 ASCII? This is useful if you're dealing with ASCII data where the correct
@@ -55,8 +54,7 @@ spellings have been lost. Requires the \pkg{stringi} package.}
 A locale object tries to capture all the defaults that can vary between
 countries. You set the locale in once, and the details are automatically
 passed on down to the columns parsers. The defaults have been chosen to
-match R (i.e. US English) as closely as possible. See
-\code{vignette("locales")} for more details.
+match R (i.e. US English) as closely as possible.
 }
 \examples{
 locale()

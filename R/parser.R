@@ -50,9 +50,7 @@ parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale
 
 #' Parse logicals, integers, and reals
 #'
-#' Use `parse_*()` if you have a character vector you want to parse. Use
-#' `col_*()` in conjunction with a `read_*()` function to parse the
-#' values as they're read in.
+#' Use `parse_*()` if you have a character vector you want to parse.
 #'
 #' @name parse_atomic
 #' @aliases NULL
@@ -134,7 +132,7 @@ col_character <- function() {
 
 #' Skip a column
 #'
-#' Use this function to ignore a column when reading in a file.
+#' Use this function to ignore a column when parsing.
 #' To skip all columns not otherwise specified, use [cols_only()].
 #'
 #' @family parsers
@@ -225,9 +223,7 @@ guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na
 
 #' Parse factors
 #'
-#' `parse_factor()` is similar to [factor()], but generates a warning if
-#' `levels` have been specified and some elements of `x` are not found in those
-#' `levels`.
+#' `parse_factor()` is similar to [factor()].
 #'
 #' @param levels Character vector of the allowed levels. When `levels = NULL`
 #'   (the default), `levels` are discovered from the unique values of `x`, in
@@ -279,7 +275,7 @@ col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
 #' Parse date/times
 #'
 #' @section Format specification:
-#' `readr` uses a format specification similar to [strptime()].
+#' `minty` (inherited from `readr`) uses a format specification similar to [strptime()].
 #' There are three types of element:
 #'
 #' 1. Date components are specified with "%" followed by a letter. For example
@@ -314,7 +310,7 @@ col_factor <- function(levels = NULL, ordered = FALSE, include_na = FALSE) {
 #'
 #' @section ISO8601 support:
 #'
-#' Currently, readr does not support all of ISO8601. Missing features:
+#' Currently, `minty` does not support all of ISO8601. Missing features:
 #'
 #' * Week & weekday specifications, e.g. "2013-W05", "2013-W05-10".
 #' * Ordinal dates, e.g. "2013-095".
@@ -441,8 +437,7 @@ col_time <- function(format = "") {
 #' A locale object tries to capture all the defaults that can vary between
 #' countries. You set the locale in once, and the details are automatically
 #' passed on down to the columns parsers. The defaults have been chosen to
-#' match R (i.e. US English) as closely as possible. See
-#' `vignette("locales")` for more details.
+#' match R (i.e. US English) as closely as possible.
 #'
 #' @param date_names Character representations of day and month names. Either
 #'   the language code as string (passed on to [date_names_lang()])
@@ -465,8 +460,7 @@ col_time <- function(format = "") {
 #'   Americans, note that "EST" is a Canadian time zone that does not have
 #'   DST. It is *not* Eastern Standard Time. It's better to use
 #'   "US/Eastern", "US/Central" etc.
-#' @param encoding Default encoding. This only affects how the file is
-#'   read - readr always converts the output to UTF-8.
+#' @param encoding Default encoding (not used in `minty`).
 #' @param asciify Should diacritics be stripped from date names and converted to
 #'   ASCII? This is useful if you're dealing with ASCII data where the correct
 #'   spellings have been lost. Requires the \pkg{stringi} package.
@@ -685,19 +679,14 @@ cat_wrap <- function(header, body) {
 #' t3$cols <- c(t1$cols, t2$cols)
 #' t3
 cols <- function(..., .default = col_guess()) {
-  ## if (edition_first()) {
     col_types <- list(...)
     is_character <- vapply(col_types, is.character, logical(1))
     col_types[is_character] <- lapply(col_types[is_character], col_concise)
-
     if (is.character(.default)) {
       .default <- col_concise(.default)
     }
-
     return(col_spec(col_types, .default))
-  }
-  ## vroom::cols(..., .default = .default)
-## }
+}
 
 #' @export
 #' @rdname cols
@@ -909,17 +898,6 @@ format_col_spec <- function(x, n = Inf, condense = NULL, ...) {
   out
 }
 
-# Used in read_delim(), read_fwf() and type_convert()
-show_cols_spec <- function(spec, n = getOption("readr.num_columns", 20)) {
-    if (n > 0) {
-        message("Column specification: ")
-        message(strsplit(format_col_spec(spec, n = n, condense = NULL), "\n")[[1]])
-        if (length(spec$cols) >= n) {
-            message("Only the first ", n, " columns are printed.", "\n")
-      }        
-    }
-}
-
 col_concise <- function(x) {
   switch(x,
     "_" = ,
@@ -938,7 +916,7 @@ col_concise <- function(x) {
   )
 }
 
-col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
+col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
                                  guessed_types = NULL,
                                  comment = "",
                                  skip = 0, skip_empty_rows = TRUE,
@@ -949,23 +927,7 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
                                  locale = default_locale(),
                                  drop_skipped_names = FALSE) {
 
-  # Figure out the column names -----------------------------------------------
-  ## if (is.logical(col_names) && length(col_names) == 1) {
-  ##   ds_header <- datasource(file, skip = skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
-  ##   if (col_names) {
-  ##     res <- guess_header(ds_header, tokenizer, locale)
-  ##     col_names <- res$header
-  ##     skip <- res$skip
-  ##   } else {
-  ##     n <- length(guess_header(ds_header, tokenizer, locale)$header)
-  ##     col_names <- paste0("X", seq_len(n))
-  ##   }
-  ##   guessed_names <- TRUE
-  ## } else if (is.character(col_names)) {
     guessed_names <- FALSE ### For our use case, col_names is always character
-  ## } else {
-  ##   stop("`col_names` must be TRUE, FALSE or a character vector", call. = FALSE)
-  ## }
 
   missing_names <- is.na(col_names)
   if (any(missing_names)) {
@@ -1089,11 +1051,6 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
 
   is_guess <- vapply(spec$cols, function(x) inherits(x, "collector_guess"), logical(1))
     if (any(is_guess)) {
-        ## guessed_types is alway there for our case
-    ## if (is.null(guessed_types)) {
-    ##   ds <- datasource(file, skip = spec$skip, skip_empty_rows = skip_empty_rows, skip_quote = skip_quote, comment = comment)
-    ##   guessed_types <- guess_types(ds, tokenizer, locale, guess_max = guess_max)
-    ## }
       
     # Need to be careful here: there might be more guesses than types/names
     guesses <- guessed_types[seq_along(spec$cols)][is_guess]
@@ -1102,34 +1059,6 @@ col_spec_standardise <- function(file, col_names = TRUE, col_types = NULL,
 
   spec
 }
-
-## check_guess_max <- function(guess_max, max_limit = .Machine$integer.max %/% 100) {
-##   if (length(guess_max) != 1 || !is.numeric(guess_max) || !is_integerish(guess_max) ||
-##     is.na(guess_max) || guess_max < 0) {
-##     stop("`guess_max` must be a positive integer", call. = FALSE)
-##   }
-
-##   if (guess_max > max_limit) {
-##     warning("`guess_max` is a very large value, setting to `", max_limit,
-##       "` to avoid exhausting memory",
-##       call. = FALSE
-##     )
-##     guess_max <- max_limit
-##   }
-##   guess_max
-## }
-
-## guess_types <- function(datasource, tokenizer, locale, guess_max = 1000,
-##                         max_limit = .Machine$integer.max %/% 100) {
-##   guess_max <- check_guess_max(guess_max, max_limit)
-
-##   guess_types_(datasource, tokenizer, locale, n = guess_max)
-## }
-
-## guess_header <- function(datasource, tokenizer, locale = default_locale()) {
-##   guess_header_(datasource, tokenizer, locale)
-## }
-
 
 ## utils
 

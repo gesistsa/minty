@@ -77,7 +77,7 @@ Parse date/times
 }
 \section{Format specification}{
 
-\code{readr} uses a format specification similar to \code{\link[=strptime]{strptime()}}.
+\code{minty} (inherited from \code{readr}) uses a format specification similar to \code{\link[=strptime]{strptime()}}.
 There are three types of element:
 \enumerate{
 \item Date components are specified with "\%" followed by a letter. For example
@@ -116,7 +116,7 @@ with a flexible HMS parser.
 \section{ISO8601 support}{
 
 
-Currently, readr does not support all of ISO8601. Missing features:
+Currently, \code{minty} does not support all of ISO8601. Missing features:
 \itemize{
 \item Week & weekday specifications, e.g. "2013-W05", "2013-W05-10".
 \item Ordinal dates, e.g. "2013-095".
