@@ -916,12 +916,7 @@ col_concise <- function(x) {
 }
 
 col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
-                                 guessed_types = NULL,
-                                 skip = 0,
-                                 drop_skipped_names = FALSE) {
-
-    guessed_names <- FALSE ### For our use case, col_names is always character
-
+                                 guessed_types = NULL) {
     missing_names <- is.na(col_names)
     if (any(missing_names)) {
         new_names <- paste0("X", seq_along(col_names)[missing_names])
@@ -960,40 +955,18 @@ col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
 
     spec <- as.col_spec(col_types)
     type_names <- names(spec$cols)
-
-    spec$skip <- skip
-
     if (length(spec$cols) == 0) {
         ## no types specified so use defaults
 
         spec$cols <- rep(list(spec$default), length(col_names))
         names(spec$cols) <- col_names
-    } else if (is.null(type_names) && guessed_names) {
-        ## unnamed types & names guessed from header: match exactly
-
-        if (length(spec$cols) != length(col_names)) {
-            warning("Unnamed `col_types` should have the same length as `col_names`. ",
-                    "Using smaller of the two.",
-                    call. = FALSE
-                    )
-            n <- min(length(col_names), length(spec$cols))
-            spec$cols <- spec$cols[seq_len(n)]
-            col_names <- col_names[seq_len(n)]
-        }
-
-        names(spec$cols) <- col_names
-    } else if (is.null(type_names) && !guessed_names) {
+        return(resolve_guess_cols(spec, guessed_types))
+    }
+    if (is.null(type_names)) {
         ## unnamed types & names supplied: match non-skipped columns
         skipped <- vapply(spec$cols, inherits, "collector_skip",
                           FUN.VALUE = logical(1)
                           )
-
-        ## Needed for read_fwf() because width generator functions have name for
-        ## every column, even those that are skipped. Not need for read_delim()
-        if (drop_skipped_names) {
-            col_names <- col_names[!skipped]
-        }
-
         n_read <- sum(!skipped)
         n_names <- length(col_names)
 
@@ -1017,43 +990,43 @@ col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
             col_names <- col_names2
         }
         names(spec$cols) <- col_names
-    } else {
-        ## names types
-
-        bad_types <- !(type_names %in% col_names)
-        if (any(bad_types)) {
-            warning("The following named parsers don't match the column names: ",
-                    paste0(type_names[bad_types], collapse = ", "),
-                    call. = FALSE
-                    )
-            spec$cols <- spec$cols[!bad_types]
-            type_names <- type_names[!bad_types]
-        }
-
-        default_types <- !(col_names %in% type_names)
-        if (any(default_types)) {
-            defaults <- rep(list(spec$default), sum(default_types))
-            names(defaults) <- col_names[default_types]
-            spec$cols[names(defaults)] <- defaults
-        }
-
-        spec$cols <- spec$cols[col_names]
+        return(resolve_guess_cols(spec, guessed_types))
+    }
+    ## names types
+    bad_types <- !(type_names %in% col_names)
+    if (any(bad_types)) {
+        warning("The following named parsers don't match the column names: ",
+                paste0(type_names[bad_types], collapse = ", "),
+                call. = FALSE
+                )
+        spec$cols <- spec$cols[!bad_types]
+        type_names <- type_names[!bad_types]
     }
 
+    default_types <- !(col_names %in% type_names)
+    if (any(default_types)) {
+        defaults <- rep(list(spec$default), sum(default_types))
+        names(defaults) <- col_names[default_types]
+        spec$cols[names(defaults)] <- defaults
+    }
+
+    spec$cols <- spec$cols[col_names]
+    return(resolve_guess_cols(spec, guessed_types))
+}
+
+## utils
+
+resolve_guess_cols <- function(spec, guessed_types) {
     ## Guess any types that need to be guessed ------------------------------------
 
     is_guess <- vapply(spec$cols, function(x) inherits(x, "collector_guess"), logical(1))
     if (any(is_guess)) {
-
         ## Need to be careful here: there might be more guesses than types/names
         guesses <- guessed_types[seq_along(spec$cols)][is_guess]
         spec$cols[is_guess] <- lapply(guesses, collector_find)
     }
-
-    spec
+    return(spec)
 }
-
-## utils
 
 check_string <- function(x, nm = deparse(substitute(x)), optional = FALSE) {
     if (rlang::is_string(x)) {
