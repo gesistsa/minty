@@ -917,40 +917,6 @@ col_concise <- function(x) {
 
 col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
                                  guessed_types = NULL) {
-    missing_names <- is.na(col_names)
-    if (any(missing_names)) {
-        new_names <- paste0("X", seq_along(col_names)[missing_names])
-        col_names[missing_names] <- new_names
-        warning(
-            "Missing column names filled in: ",
-            paste0(
-                encodeString(new_names, quote = "'"),
-                " [", which(missing_names), "]",
-                collapse = ", "
-            ),
-            call. = FALSE
-        )
-    }
-
-    if (anyDuplicated(col_names)) {
-        dups <- duplicated(col_names)
-
-        old_names <- col_names
-        col_names <- make.unique(col_names, sep = "_")
-
-        warning(
-            "Duplicated column names deduplicated: ",
-            paste0(
-                encodeString(old_names[dups], quote = "'"),
-                " => ",
-                encodeString(col_names[dups], quote = "'"),
-                " [", which(dups), "]",
-                collapse = ", "
-            ),
-            call. = FALSE
-        )
-    }
-
     ## Figure out column types ----------------------------------------------------
 
     spec <- as.col_spec(col_types)
@@ -963,32 +929,7 @@ col_spec_standardise <- function(col_names = TRUE, col_types = NULL,
         return(resolve_guess_cols(spec, guessed_types))
     }
     if (is.null(type_names)) {
-        ## unnamed types & names supplied: match non-skipped columns
-        skipped <- vapply(spec$cols, inherits, "collector_skip",
-                          FUN.VALUE = logical(1)
-                          )
-        n_read <- sum(!skipped)
-        n_names <- length(col_names)
-
-        n_new <- abs(n_names - n_read)
-        if (n_read < n_names) {
-            warning("Insufficient `col_types`. Guessing ", n_new, " columns.",
-                    call. = FALSE
-                    )
-            spec$cols <- c(spec$cols, list(rep(col_guess(), n_new)))
-        } else if (n_read > n_names) {
-            warning("Insufficient `col_names`. Adding ", n_new, " names.",
-                    call. = FALSE
-                    )
-
-            col_names2 <- rep("", length(spec$cols))
-            col_names2[!skipped] <- c(col_names, paste0("X", seq_len(n_new) + n_names))
-            col_names <- col_names2
-        } else {
-            col_names2 <- rep("", length(spec$cols))
-            col_names2[!skipped] <- col_names
-            col_names <- col_names2
-        }
+        ## cases like "?-" or list("?", "-")
         names(spec$cols) <- col_names
         return(resolve_guess_cols(spec, guessed_types))
     }
