@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # minty <img src="man/figures/logo.png" align="right" height="138" alt = ""/>
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/chainsawriot/minty/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is an experimental package to spin off the type inferencing and parsing tools (the so-called 1e parsing engine) from `readr` (see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)). Since July 2021, these tools are not used internally by `readr` for parsing text files. Now `vroom` is used by default, unless explicitly call the first edition parsing engine (see the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
