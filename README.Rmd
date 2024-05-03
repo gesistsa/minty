@@ -110,7 +110,7 @@ str(res)
 
 ## Differences: `readr` vs `minty`
 
-Unlike `readr` and `vroom`, please note that `minty` is mainly for **non-interactive usage**. Therefore, `minty` emits fewer messages and warnings than `readr` and `vroom`. 
+Unlike `readr` and `vroom`, please note that `minty` is mainly for **non-interactive usage**. Therefore, `minty` emits fewer messages and warnings than `readr` and `vroom`.
 
 ```{r}
 data <- minty::type_convert(text_only)
@@ -145,3 +145,8 @@ For parsing ambiguous date(time)
 * [timeless](https://github.com/schochastics/timeless)
 * [anytime](https://github.com/eddelbuettel/anytime)
 
+## Acknowledgements
+
+Thanks to:
+
+* The [Tidyverse Team](https://github.com/tidyverse) for allowing us to spinning off the code from `readr`

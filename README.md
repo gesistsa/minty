@@ -211,3 +211,10 @@ For parsing ambiguous date(time)
 
   - [timeless](https://github.com/schochastics/timeless)
   - [anytime](https://github.com/eddelbuettel/anytime)
+
+## Acknowledgements
+
+Thanks to:
+
+  - The [Tidyverse Team](https://github.com/tidyverse) for allowing us
+    to spinning off the code from `readr`
