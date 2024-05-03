@@ -26,12 +26,20 @@ extern "C" SEXP _minty_type_convert_col(SEXP x, SEXP spec, SEXP locale_, SEXP co
     return cpp11::as_sexp(type_convert_col(cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(x), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(spec), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_), cpp11::as_cpp<cpp11::decay_t<int>>(col), cpp11::as_cpp<cpp11::decay_t<const std::vector<std::string>&>>(na), cpp11::as_cpp<cpp11::decay_t<bool>>(trim_ws)));
   END_CPP11
 }
+// type_convert.cpp
+bool r_is_string_cpp11(const cpp11::sexp& x);
+extern "C" SEXP _minty_r_is_string_cpp11(SEXP x) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(r_is_string_cpp11(cpp11::as_cpp<cpp11::decay_t<const cpp11::sexp&>>(x)));
+  END_CPP11
+}
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_minty_collectorGuess",   (DL_FUNC) &_minty_collectorGuess,   3},
-    {"_minty_parse_vector_",    (DL_FUNC) &_minty_parse_vector_,    5},
-    {"_minty_type_convert_col", (DL_FUNC) &_minty_type_convert_col, 6},
+    {"_minty_collectorGuess",    (DL_FUNC) &_minty_collectorGuess,    3},
+    {"_minty_parse_vector_",     (DL_FUNC) &_minty_parse_vector_,     5},
+    {"_minty_r_is_string_cpp11", (DL_FUNC) &_minty_r_is_string_cpp11, 1},
+    {"_minty_type_convert_col",  (DL_FUNC) &_minty_type_convert_col,  6},
     {NULL, NULL, 0}
 };
 }

@@ -22,7 +22,6 @@ Language: en-US
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.1
 Imports: 
-    rlang,
     tzdb
 Suggests: 
     knitr,
