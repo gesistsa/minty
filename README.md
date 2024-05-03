@@ -217,4 +217,4 @@ For parsing ambiguous date(time)
 Thanks to:
 
   - The [Tidyverse Team](https://github.com/tidyverse) for allowing us
-    to spinning off the code from `readr`
+    to spin off the code from `readr`
