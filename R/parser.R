@@ -970,7 +970,7 @@ resolve_guess_cols <- function(spec, guessed_types) {
 }
 
 check_string <- function(x, nm = deparse(substitute(x)), optional = FALSE) {
-    if (rlang::is_string(x)) {
+    if (r_is_string_cpp11(x)) {
         return()
     }
     if (optional && is.null(x)) {

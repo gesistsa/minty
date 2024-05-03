@@ -76,3 +76,16 @@ test_that("skip behaviors, readr#1509 or minty#20", {
     expect_error(minty::type_convert(text_only, col_types = list("?", "-")), NA)
     expect_error(minty::type_convert(text_only, col_types = list("-", "-")), NA)
 })
+
+test_that("r_is_string_cpp11", {
+    expect_true(r_is_string_cpp11("a"))
+    expect_true(r_is_string_cpp11(c("a")))
+    expect_false(r_is_string_cpp11(123))
+    expect_false(r_is_string_cpp11(c(123, 123)))
+    expect_false(r_is_string_cpp11(TRUE))
+    expect_false(r_is_string_cpp11(c(TRUE, FALSE)))
+    expect_false(r_is_string_cpp11(c("a", "b")))
+    expect_false(r_is_string_cpp11(NA))
+    expect_false(r_is_string_cpp11(NA_character_))
+    expect_false(r_is_string_cpp11(NULL))
+})

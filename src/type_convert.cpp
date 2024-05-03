@@ -38,3 +38,17 @@
 
   return static_cast<SEXP>(collector->vector());
 }
+
+[[cpp11::register]] bool r_is_string_cpp11 (const cpp11::sexp& x) {
+  // a lazy reimplementation of rlang::r_is_string
+  if (TYPEOF(x) != STRSXP) {
+    return false;
+  }
+  if (Rf_xlength(x) != 1) {
+    return false;
+  }
+  if (STRING_ELT(x, 0) == NA_STRING) {
+    return false;
+  }
+  return true;
+}

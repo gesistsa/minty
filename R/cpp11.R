@@ -11,3 +11,7 @@ parse_vector_ <- function(x, collectorSpec, locale_, na, trim_ws) {
 type_convert_col <- function(x, spec, locale_, col, na, trim_ws) {
   .Call(`_minty_type_convert_col`, x, spec, locale_, col, na, trim_ws)
 }
+
+r_is_string_cpp11 <- function(x) {
+  .Call(`_minty_r_is_string_cpp11`, x)
+}
