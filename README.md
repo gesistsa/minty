@@ -32,7 +32,10 @@ parse interactively, please use either `readr` or `vroom`.
 You can install the development version of minty like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+if (!require("remotes")){
+    install.packages("remotes")
+}
+remotes::install_github("gesistsa/minty")
 ```
 
 ## Example

@@ -3,3 +3,6 @@
 ^src/.clang-format$
 ^\.github$
 ^.editorconfig$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
