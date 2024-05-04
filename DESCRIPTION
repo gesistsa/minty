@@ -32,3 +32,4 @@ Suggests:
     withr,
     hms,
     readr
+Config/Needs/website: gesistsa/tsatemplate
