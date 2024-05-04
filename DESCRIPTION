@@ -8,6 +8,8 @@ Authors@R: c(
   )
 Description: Port the type inferencing and parsing tools from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
 License: MIT + file LICENSE
+URL: https://gesistsa.github.io/minty/, https://github.com/gesistsa/minty
+BugReports: https://github.com/gesistsa/minty/issues
 Depends:
     R (>= 3.6)
 LinkingTo: 
@@ -30,4 +32,3 @@ Suggests:
     withr,
     hms,
     readr
-
