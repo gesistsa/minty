@@ -17,13 +17,12 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/minty)](https://CRAN.R-project.org/package=minty)
 <!-- badges: end -->
 
-`minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is an experimental package to spin off the type inferencing and parsing tools (the so-called 1e parsing engine) from `readr` (see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)). Since July 2021, these tools are not used internally by `readr` for parsing text files. Now `vroom` is used by default, unless explicitly call the first edition parsing engine (see the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
+`minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is a package with the type inferencing and parsing tools (the so-called 1e parsing engine) extracted from `readr` (with permission, see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)). Since July 2021, these tools are not used internally by `readr` for parsing text files. Now `vroom` is used by default, unless explicitly call the first edition parsing engine (see the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
 
-`readr`'s 1e type inferencing and parsing tools are used by various R packages, e.g. `readODS` and `surveytoolbox`, but ironically those packages do not use the main functions (e.g. `readr::read_delim()`) of `readr`. As explained in the README of `readr`, those 1e code will be eventually removed from `readr`.
-
-`minty` aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages. If you need to parse interactively, please use either `readr` or `vroom`.
+`readr`'s 1e type inferencing and parsing tools are used by various R packages, e.g. `readODS` and `surveytoolbox` for parsing in-memory objects, but those packages do not use the main functions (e.g. `readr::read_delim()`) of `readr`. As explained in the README of `readr`, those 1e code will be eventually removed from `readr`. `minty` aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages.
 
 ## Installation
 
@@ -58,7 +57,7 @@ str(type.convert(text_only, as.is = TRUE))
 Inferencing the column types
 
 ```{r}
-library(minty, warn.conflicts = FALSE)
+library(minty)
 data <- type_convert(text_only)
 data
 ```
@@ -147,6 +146,10 @@ For parsing ambiguous date(time)
 
 * [timeless](https://github.com/schochastics/timeless)
 * [anytime](https://github.com/eddelbuettel/anytime)
+
+Guess column types of a text file
+
+* [hdd](https://CRAN.R-project.org/package=hdd)
 
 ## Acknowledgements
 
