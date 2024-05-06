@@ -73,9 +73,8 @@
 </div>
 <!-- badges: start -->
 
-<p><code>minty</code> (<strong>Min</strong>imal <strong>ty</strong>pe Inferencing and Parsing Tools) is an experimental package to spin off the type inferencing and parsing tools (the so-called 1e parsing engine) from <code>readr</code> (see this issue <a href="https://github.com/tidyverse/readr/issues/1517" class="external-link">tidyverse/readr#1517</a>). Since July 2021, these tools are not used internally by <code>readr</code> for parsing text files. Now <code>vroom</code> is used by default, unless explicitly call the first edition parsing engine (see the explanation on <a href="https://github.com/tidyverse/readr?tab=readme-ov-file#editions" class="external-link">editions</a>).</p>
-<p><code>readr</code>’s 1e type inferencing and parsing tools are used by various R packages, e.g. <code>readODS</code> and <code>surveytoolbox</code>, but ironically those packages do not use the main functions (e.g. <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code>) of <code>readr</code>. As explained in the README of <code>readr</code>, those 1e code will be eventually removed from <code>readr</code>.</p>
-<p><code>minty</code> aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages. If you need to parse interactively, please use either <code>readr</code> or <code>vroom</code>.</p>
+<p><code>minty</code> (<strong>Min</strong>imal <strong>ty</strong>pe Inferencing and Parsing Tools) is a package with the type inferencing and parsing tools (the so-called 1e parsing engine) extracted from <code>readr</code> (with permission, see this issue <a href="https://github.com/tidyverse/readr/issues/1517" class="external-link">tidyverse/readr#1517</a>). Since July 2021, these tools are not used internally by <code>readr</code> for parsing text files. Now <code>vroom</code> is used by default, unless explicitly call the first edition parsing engine (see the explanation on <a href="https://github.com/tidyverse/readr?tab=readme-ov-file#editions" class="external-link">editions</a>).</p>
+<p><code>readr</code>’s 1e type inferencing and parsing tools are used by various R packages, e.g. <code>readODS</code> and <code>surveytoolbox</code> for parsing in-memory objects, but those packages do not use the main functions (e.g. <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code>) of <code>readr</code>. As explained in the README of <code>readr</code>, those 1e code will be eventually removed from <code>readr</code>. <code>minty</code> aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -115,7 +114,7 @@
 <span><span class="co">#&gt;  $ dob       : chr  "2019/07/21" "2019/08/31" "2019/10/01"</span></span></code></pre></div>
 <p>Inferencing the column types</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gesistsa.github.io/minty/" class="external-link">minty</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gesistsa.github.io/minty/" class="external-link">minty</a></span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type_convert.html">type_convert</a></span><span class="op">(</span><span class="va">text_only</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">#&gt;   maybe_age maybe_male maybe_name  some_na        dob</span></span>
@@ -227,6 +226,10 @@
 <li><a href="https://github.com/schochastics/timeless" class="external-link">timeless</a></li>
 <li><a href="https://github.com/eddelbuettel/anytime" class="external-link">anytime</a></li>
 </ul>
+<p>Guess column types of a text file</p>
+<ul>
+<li><a href="https://CRAN.R-project.org/package=hdd" class="external-link">hdd</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
@@ -275,6 +278,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=minty" class="external-link"><img src="https://www.r-pkg.org/badges/version/minty" alt="CRAN status"></a></li>
 </ul>
 </div>
 
