@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/minty)](https://CRAN.R-project.org/package=minty)
 <!-- badges: end -->
 
-`minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is a package with the type inferencing and parsing tools (the so-called 1e parsing engine) extracted from `readr` (with permission, see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)). Since July 2021, these tools are not used internally by `readr` for parsing text files. Now `vroom` is used by default, unless explicitly call the first edition parsing engine (see the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
+`minty` (**Min**imal **ty**pe guesser) is a package with the type inferencing and parsing tools (the so-called 1e parsing engine) extracted from `readr` (with permission, see this issue [tidyverse/readr#1517](https://github.com/tidyverse/readr/issues/1517)). Since July 2021, these tools are not used internally by `readr` for parsing text files. Now `vroom` is used by default, unless explicitly call the first edition parsing engine (see the explanation on [editions](https://github.com/tidyverse/readr?tab=readme-ov-file#editions)).
 
 `readr`'s 1e type inferencing and parsing tools are used by various R packages, e.g. `readODS` and `surveytoolbox` for parsing in-memory objects, but those packages do not use the main functions (e.g. `readr::read_delim()`) of `readr`. As explained in the README of `readr`, those 1e code will be eventually removed from `readr`. `minty` aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages.
 

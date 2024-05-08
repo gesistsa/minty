@@ -10,9 +10,9 @@
 status](https://www.r-pkg.org/badges/version/minty)](https://CRAN.R-project.org/package=minty)
 <!-- badges: end -->
 
-`minty` (**Min**imal **ty**pe Inferencing and Parsing Tools) is a
-package with the type inferencing and parsing tools (the so-called 1e
-parsing engine) extracted from `readr` (with permission, see this issue
+`minty` (**Min**imal **ty**pe guesser) is a package with the type
+inferencing and parsing tools (the so-called 1e parsing engine)
+extracted from `readr` (with permission, see this issue
 [tidyverse/readr\#1517](https://github.com/tidyverse/readr/issues/1517)).
 Since July 2021, these tools are not used internally by `readr` for
 parsing text files. Now `vroom` is used by default, unless explicitly
