@@ -1,12 +1,12 @@
 Package: minty
-Title: Minimal Type Inferencing and Parsing Tools
+Title: Minimal Type Guesser
 Version: 0.0.1
 Authors@R: c(
     person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com", comment = c(ORCID = "0000-0002-6232-7530")),
     person("readr authors", role = c("ctb", "cph"),
            comment = "readr source code")
   )
-Description: Port the type inferencing and parsing tools from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
+Description: Port the type guesser from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
 License: MIT + file LICENSE
 URL: https://gesistsa.github.io/minty/, https://github.com/gesistsa/minty
 BugReports: https://github.com/gesistsa/minty/issues
