@@ -617,11 +617,6 @@ date_names_langs <- function() {
 
 is.date_names <- function(x) inherits(x, "date_names")
 
-cat_wrap <- function(header, body) {
-    body <- strwrap(body, exdent = nchar(header))
-    cat(header, paste(body, collapse = "\n"), "\n", sep = "")
-}
-
 ## col_spec
 
 #' Create column specification
