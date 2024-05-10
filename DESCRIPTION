@@ -3,9 +3,14 @@ Title: Minimal Type Guesser
 Version: 0.0.1
 Authors@R: c(
     person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com", comment = c(ORCID = "0000-0002-6232-7530")),
-    person("readr authors", role = c("ctb", "cph"),
-           comment = "readr source code")
-  )
+    person("Hadley", "Wickham", , "hadley@posit.co", role = "aut", comment = "author of the ported code from readr"),
+    person("Jim", "Hester", role = "aut", comment = "author of the ported code from readr"),
+    person("Romain", "Francois", role = "ctb", comment = "author of the ported code from readr"),
+    person("Jennifer", "Bryan", , "jenny@posit.co", role = c("aut"), comment = "author of the ported code from readr"),
+    person("Shelby", "Bearrows", role = "ctb", comment = "author of the ported code from readr"),
+    person("Posit Software, PBC", role = "cph", comment = "copyright holder of readr"),
+    person("David", "Olson", role = "aut", comment = "author of src/tzfile.h")
+    )
 Description: Port the type guesser from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
 License: MIT + file LICENSE
 URL: https://gesistsa.github.io/minty/, https://github.com/gesistsa/minty
