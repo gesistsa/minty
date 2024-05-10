@@ -50,6 +50,9 @@ DST. It is \emph{not} Eastern Standard Time. It's better to use
 ASCII? This is useful if you're dealing with ASCII data where the correct
 spellings have been lost. Requires the \pkg{stringi} package.}
 }
+\value{
+a list / S3 object representing the locale information
+}
 \description{
 A locale object tries to capture all the defaults that can vary between
 countries. You set the locale in once, and the details are automatically

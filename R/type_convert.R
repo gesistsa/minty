@@ -14,6 +14,7 @@
 #' @inheritParams parse_guess
 #' @note `type_convert()` removes a 'spec' attribute (if it presents).
 #' @export
+#' @return A data frame
 #' @examples
 #' df <- data.frame(
 #'   x = as.character(runif(10)),

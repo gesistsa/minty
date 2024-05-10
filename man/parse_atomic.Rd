@@ -68,6 +68,9 @@ each field before parsing it?}
 
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
+\value{
+a parsed vector
+}
 \description{
 Use \verb{parse_*()} if you have a character vector you want to parse.
 }
@@ -89,7 +92,6 @@ parse_double(x, na = "-")
 \seealso{
 Other parsers: 
 \code{\link{col_skip}()},
-\code{\link{cols}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_guess}()},

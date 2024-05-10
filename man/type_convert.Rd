@@ -39,6 +39,9 @@ names.}
 
 \item{verbose}{whether to print messages}
 }
+\value{
+A data frame
+}
 \description{
 This is useful if you need to do some manual munging - you can read the
 columns in as character, clean it up with (e.g.) regular expressions and
