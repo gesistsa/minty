@@ -34,6 +34,8 @@ each field before parsing it?}
 }
 \value{
 A numeric vector (double) of parsed numbers.
+
+a parsed vector
 }
 \description{
 This parses the first number it finds, dropping any non-numeric characters
@@ -59,7 +61,6 @@ parse_number(c("1", "2", "3", "NA", "Nothing"), na = c("NA", "Nothing"))
 \seealso{
 Other parsers: 
 \code{\link{col_skip}()},
-\code{\link{cols}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_guess}()},

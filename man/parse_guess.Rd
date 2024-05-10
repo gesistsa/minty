@@ -36,6 +36,9 @@ each field before parsing it?}
 
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
+\value{
+a parsed vector
+}
 \description{
 \code{parse_guess()} returns the parser vector. This function uses a number of heuristics
 to determine which type of vector is "best". Generally they try to err of
@@ -59,7 +62,6 @@ parse_guess(c("2010-10-10"))
 \seealso{
 Other parsers: 
 \code{\link{col_skip}()},
-\code{\link{cols}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_logical}()},

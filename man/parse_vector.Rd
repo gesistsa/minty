@@ -20,6 +20,9 @@ parse_vector(
 
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
+\value{
+a parsed vector
+}
 \description{
 Parse a character vector.
 }
@@ -31,7 +34,6 @@ parse_vector(x, col_double())
 \seealso{
 Other parsers: 
 \code{\link{col_skip}()},
-\code{\link{cols}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_factor}()},
 \code{\link{parse_guess}()},

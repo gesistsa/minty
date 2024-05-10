@@ -44,6 +44,9 @@ each field before parsing it?}
 
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
+\value{
+a parsed vector
+}
 \description{
 \code{parse_factor()} is similar to \code{\link[=factor]{factor()}}.
 }
@@ -71,7 +74,6 @@ parse_factor(x, levels = animals)
 \seealso{
 Other parsers: 
 \code{\link{col_skip}()},
-\code{\link{cols}()},
 \code{\link{parse_datetime}()},
 \code{\link{parse_guess}()},
 \code{\link{parse_logical}()},

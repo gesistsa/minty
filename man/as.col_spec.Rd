@@ -9,6 +9,9 @@ as.col_spec(x)
 \arguments{
 \item{x}{Input object}
 }
+\value{
+a list / S3 object representing column specification
+}
 \description{
 This is most useful for generating a specification using the short form
 }

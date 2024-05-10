@@ -28,6 +28,7 @@ collector_find <- function(name) {
 #' @param .return_problems Whether to hide the `problems` tibble from the output
 #' @keywords internal
 #' @export
+#' @return a parsed vector
 #' @examples
 #' x <- c("1", "2", "3", "NA")
 #' parse_vector(x, col_integer())
@@ -65,6 +66,7 @@ parse_vector <- function(x, collector, na = c("", "NA"), locale = default_locale
 #'     each field before parsing it?
 #' @inheritParams parse_vector
 #' @family parsers
+#' @return a parsed vector
 #' @examples
 #' parse_integer(c("1", "2", "3"))
 #' parse_double(c("1", "2", "3.123"))
@@ -129,11 +131,7 @@ col_character <- function() {
     collector("character")
 }
 
-#' Skip a column
-#'
-#' Use this function to ignore a column when parsing.
-#' To skip all columns not otherwise specified, use [cols_only()].
-#'
+#' @rdname cols
 #' @family parsers
 #' @export
 col_skip <- function() {
@@ -150,6 +148,7 @@ col_skip <- function() {
 #' @return A numeric vector (double) of parsed numbers.
 #' @family parsers
 #' @export
+#' @return a parsed vector
 #' @examples
 #' ## These all return 1000
 #' parse_number("$1,000") ## leading `$` and grouping character `,` ignored
@@ -187,6 +186,7 @@ col_number <- function() {
 #' @param guess_integer If `TRUE`, guess integer types for whole numbers, if
 #'   `FALSE` guess numeric type for all numbers.
 #' @family parsers
+#' @return a parsed vector
 #' @export
 #' @examples
 #' # Logical vectors
@@ -232,6 +232,7 @@ guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na
 #'   is included in the levels of the constructed factor.
 #'
 #' @inheritParams parse_atomic
+#' @return a parsed vector
 #' @family parsers
 #' @export
 #' @examples
@@ -464,6 +465,7 @@ col_time <- function(format = "") {
 #'   ASCII? This is useful if you're dealing with ASCII data where the correct
 #'   spellings have been lost. Requires the \pkg{stringi} package.
 #' @export
+#' @return a list / S3 object representing the locale information
 #' @examples
 #' locale()
 #' locale("fr")
@@ -569,6 +571,7 @@ check_encoding <- function(x) {
 #' @param mon,mon_ab Full and abbreviated month names.
 #' @param day,day_ab Full and abbreviated week day names. Starts with Sunday.
 #' @param am_pm Names used for AM and PM.
+#' @return a list / S3 object representing data time
 #' @export
 #' @examples
 #' date_names_lang("en")
@@ -649,6 +652,7 @@ is.date_names <- function(x) inherits(x, "date_names")
 #' @param .default Any named columns not explicitly overridden in `...`
 #'   will be read with this column type.
 #' @export
+#' @return a list / S3 object representing column specification
 #' @examples
 #' cols(a = col_integer())
 #' cols_only(a = col_integer())
@@ -722,6 +726,7 @@ is.col_spec <- function(x) inherits(x, "col_spec")
 #' @keywords internal
 #' @examples
 #' as.col_spec("cccnnn")
+#' @return a list / S3 object representing column specification
 #' @export
 as.col_spec <- function(x) UseMethod("as.col_spec")
 #' @export

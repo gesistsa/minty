@@ -23,6 +23,9 @@ date_names_langs()
 e.g. \code{"en"} for American English. See \code{date_names_langs()}
 for a complete list of available locales.}
 }
+\value{
+a list / S3 object representing data time
+}
 \description{
 When parsing dates, you often need to know how weekdays of the week and
 months are represented as text. This pair of functions allows you to either
