@@ -127,3 +127,25 @@ test_that("scientific notation is parsed properly", {
   expect_equal(parse_number("-17E-5-5"), -0.00017)
   expect_equal(parse_number("1.2E-3"), 0.0012)
 })
+
+## Inf NAN NA ref gesistsa/minty#11
+
+test_that("special cases", {
+    ## Inf
+    expect_equal(parse_double("Inf"), Inf)
+    expect_equal(parse_double("INF"), Inf)
+    expect_equal(parse_double("-inf"), -Inf)
+    expect_equal(parse_double("-Inf"), -Inf)
+    expect_equal(parse_double("Infa"), NA_real_)
+    ## NAN
+    expect_equal(parse_double("NAN"), NaN)
+    expect_equal(parse_double("Nan"), NaN)
+    expect_equal(parse_double("-nan"), NaN)
+    expect_equal(parse_double("-nan"), NaN)
+    expect_equal(parse_double("nana"), NA_real_)
+    ## NA
+    expect_equal(parse_double("NA"), NA_real_)
+    expect_equal(parse_double("Naan"), NA_real_) ## in fact..
+    ## integration
+    expect_equal(parse_double(c("NA", "NaN", "Inf", "3.14")), c(NA_real_, NaN, Inf, 3.14))
+})

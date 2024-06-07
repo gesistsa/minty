@@ -208,6 +208,26 @@ readr::parse_logical(c("true", "fake", "IDK"), na = "IDK")
 #> 1     2    NA 1/0/T/F/TRUE/FALSE fake
 ```
 
+Some features from `vroom` have been ported to `minty`, but not `readr`.
+
+``` r
+## tidyverse/readr#1526
+minty::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+#> 'data.frame':    3 obs. of  1 variable:
+#>  $ a: num  NaN Inf -Inf
+```
+
+``` r
+readr::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
+#> cols(
+#>   a = col_character()
+#> )
+#> 'data.frame':    3 obs. of  1 variable:
+#>  $ a: chr  "NaN" "Inf" "-INF"
+```
+
 ## Similar packages
 
 For parsing ambiguous date(time)

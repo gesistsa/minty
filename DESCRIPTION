@@ -1,6 +1,6 @@
 Package: minty
 Title: Minimal Type Guesser
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com", comment = c(ORCID = "0000-0002-6232-7530")),
     person("Hadley", "Wickham", , "hadley@posit.co", role = "aut", comment = "author of the ported code from readr"),
