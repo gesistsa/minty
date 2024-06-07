@@ -140,6 +140,17 @@ minty::parse_logical(c("true", "fake", "IDK"), na = "IDK")
 readr::parse_logical(c("true", "fake", "IDK"), na = "IDK")
 ```
 
+Some features from `vroom` have been ported to `minty`, but not `readr`.
+
+```{r}
+## tidyverse/readr#1526
+minty::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+```
+
+```{r}
+readr::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+```
+
 ## Similar packages
 
 For parsing ambiguous date(time)
