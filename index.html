@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="index.html">minty</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,6 +217,21 @@
 <span><span class="co">#&gt;     row   col expected           actual</span></span>
 <span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;              &lt;chr&gt; </span></span>
 <span><span class="co">#&gt; 1     2    NA 1/0/T/F/TRUE/FALSE fake</span></span></code></pre></div>
+<p>Some features from <code>vroom</code> have been ported to <code>minty</code>, but not <code>readr</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## tidyverse/readr#1526</span></span>
+<span><span class="fu">minty</span><span class="fu">::</span><span class="fu"><a href="reference/type_convert.html">type_convert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NaN"</span>, <span class="st">"Inf"</span>, <span class="st">"-INF"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    3 obs. of  1 variable:</span></span>
+<span><span class="co">#&gt;  $ a: num  NaN Inf -Inf</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/type_convert.html" class="external-link">type_convert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NaN"</span>, <span class="st">"Inf"</span>, <span class="st">"-INF"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; cols(</span></span>
+<span><span class="co">#&gt;   a = col_character()</span></span>
+<span><span class="co">#&gt; )</span></span>
+<span><span class="co">#&gt; 'data.frame':    3 obs. of  1 variable:</span></span>
+<span><span class="co">#&gt;  $ a: chr  "NaN" "Inf" "-INF"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="similar-packages">Similar packages<a class="anchor" aria-label="anchor" href="#similar-packages"></a>
@@ -244,6 +259,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=minty" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/gesistsa/minty/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/gesistsa/minty/issues" class="external-link">Report a bug</a></li>
 </ul>
