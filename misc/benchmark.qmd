@@ -1,0 +1,31 @@
+---
+title: Minty Benchmarks
+format: gfm
+---
+
+```{r}
+suppressPackageStartupMessages(library(minty))
+suppressPackageStartupMessages(library(readr))
+Sys.time()
+```
+
+Under 200 rows, simple
+
+```{r}
+iris_chr <- as.data.frame(lapply(iris, as.character))
+bench::mark(minty::type_convert(iris_chr), iterations = 10)
+bench::mark(suppressMessages(readr::type_convert(iris_chr)), iterations = 10)
+```
+
+Many rows
+
+```{r}
+flights_chr <- as.data.frame(lapply(nycflights13::flights, as.character))
+bench::mark(x <- minty::type_convert(flights_chr, guess_integer = TRUE), iterations = 5)
+bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer = TRUE)), iterations = 5)
+all.equal(x, y)
+```
+
+```{r}
+sessionInfo()
+```
