@@ -16,7 +16,7 @@ if needed."><meta property="og:image" content="http://gesistsa.github.io/minty/l
     
     <a class="navbar-brand me-2" href="../index.html">minty</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,7 @@ if needed.</p>
 <span>  locale <span class="op">=</span> <span class="fu"><a href="locale.html">default_locale</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  trim_ws <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  guess_integer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  guess_max <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  .return_problems <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -96,6 +97,10 @@ each field before parsing it?</p></dd>
 <dt>guess_integer</dt>
 <dd><p>If <code>TRUE</code>, guess integer types for whole numbers, if
 <code>FALSE</code> guess numeric type for all numbers.</p></dd>
+
+
+<dt>guess_max</dt>
+<dd><p>Maximum number of data rows to use for guessing column types. <code>NA</code>: uses all data.</p></dd>
 
 
 <dt>.return_problems</dt>

@@ -16,7 +16,7 @@ the base utils::type.convert()."><meta property="og:image" content="http://gesis
     
     <a class="navbar-brand me-2" href="../index.html">minty</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@ the base <code><a href="https://rdrr.io/r/utils/type.convert.html" class="extern
 <span>  trim_ws <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  locale <span class="op">=</span> <span class="fu"><a href="locale.html">default_locale</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  guess_integer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  guess_max <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,6 +102,10 @@ names.</p></dd>
 <dt>guess_integer</dt>
 <dd><p>If <code>TRUE</code>, guess integer types for whole numbers, if
 <code>FALSE</code> guess numeric type for all numbers.</p></dd>
+
+
+<dt>guess_max</dt>
+<dd><p>Maximum number of data rows to use for guessing column types. <code>NA</code>: uses all data.</p></dd>
 
 
 <dt>verbose</dt>
