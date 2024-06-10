@@ -144,11 +144,25 @@ Some features from `vroom` have been ported to `minty`, but not `readr`.
 
 ```{r}
 ## tidyverse/readr#1526
-minty::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+minty::type_convert(data.frame(a = c("NaN", "Inf", "-INF"))) |> str()
 ```
 
 ```{r}
-readr::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+readr::type_convert(data.frame(a = c("NaN", "Inf", "-INF"))) |> str()
+```
+
+`guess_max` is available for `parse_guess()` and `type_convert()`, default to `NA` (same as `readr`).
+
+```{r}
+minty::parse_guess(c("1", "2", "drei"))
+```
+
+```{r}
+minty::parse_guess(c("1", "2", "drei"), guess_max = 2)
+```
+
+```{r}
+readr::parse_guess(c("1", "2", "drei"))
 ```
 
 ## Similar packages

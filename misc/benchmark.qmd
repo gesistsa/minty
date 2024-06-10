@@ -26,6 +26,14 @@ bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer
 all.equal(x, y)
 ```
 
+Many row, guess_max
+
+```{r}
+bench::mark(x <- minty::type_convert(flights_chr, guess_integer = TRUE, guess_max = 500), iterations = 5)
+bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer = TRUE)), iterations = 5)
+all.equal(x, y)
+```
+
 ```{r}
 sessionInfo()
 ```

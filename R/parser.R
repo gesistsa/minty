@@ -185,6 +185,7 @@ col_number <- function() {
 #' @inheritParams parse_atomic
 #' @param guess_integer If `TRUE`, guess integer types for whole numbers, if
 #'   `FALSE` guess numeric type for all numbers.
+#' @param guess_max Maximum number of data rows to use for guessing column types. `NA`: uses all data.
 #' @family parsers
 #' @return a parsed vector
 #' @export
@@ -201,8 +202,8 @@ col_number <- function() {
 #'
 #' # ISO 8601 date times
 #' parse_guess(c("2010-10-10"))
-parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE, .return_problems = FALSE) {
-    parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na), na = na, locale = locale, trim_ws = trim_ws,
+parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE, guess_max = NA, .return_problems = FALSE) {
+    parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na, guess_max = guess_max), na = na, locale = locale, trim_ws = trim_ws,
                  .return_problems = .return_problems)
 }
 
@@ -212,12 +213,17 @@ col_guess <- function() {
     collector("guess")
 }
 
-guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA")) {
+guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA"), guess_max = 1000) {
     x[x %in% na] <- NA_character_
-
     stopifnot(is.locale(locale))
-
-    collectorGuess(x, locale, guessInteger = guess_integer)
+    if (is.na(guess_max)) {
+        guess_max <- NA_integer_
+    }
+    stopifnot(is.numeric(guess_max))
+    if (abs(guess_max) == Inf || is.nan(guess_max) || guess_max < 1 || is.na(guess_max)) {
+        guess_max <- length(x)
+    }
+    collectorGuess(x, locale, guessInteger = guess_integer, as.integer(guess_max))
 }
 
 #' Parse factors

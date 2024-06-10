@@ -212,13 +212,13 @@ Some features from `vroom` have been ported to `minty`, but not `readr`.
 
 ``` r
 ## tidyverse/readr#1526
-minty::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+minty::type_convert(data.frame(a = c("NaN", "Inf", "-INF"))) |> str()
 #> 'data.frame':    3 obs. of  1 variable:
 #>  $ a: num  NaN Inf -Inf
 ```
 
 ``` r
-readr::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
+readr::type_convert(data.frame(a = c("NaN", "Inf", "-INF"))) |> str()
 #> 
 #> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
@@ -226,6 +226,24 @@ readr::type_convert(data.frame(a=c("NaN", "Inf", "-INF"))) |> str()
 #> )
 #> 'data.frame':    3 obs. of  1 variable:
 #>  $ a: chr  "NaN" "Inf" "-INF"
+```
+
+`guess_max` is available for `parse_guess()` and `type_convert()`,
+default to `NA` (same as `readr`).
+
+``` r
+minty::parse_guess(c("1", "2", "drei"))
+#> [1] "1"    "2"    "drei"
+```
+
+``` r
+minty::parse_guess(c("1", "2", "drei"), guess_max = 2)
+#> [1]  1  2 NA
+```
+
+``` r
+readr::parse_guess(c("1", "2", "drei"))
+#> [1] "1"    "2"    "drei"
 ```
 
 ## Similar packages
