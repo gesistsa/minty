@@ -11,6 +11,7 @@ type_convert(
   trim_ws = TRUE,
   locale = default_locale(),
   guess_integer = FALSE,
+  guess_max = 1000,
   verbose = FALSE
 )
 }
@@ -36,6 +37,8 @@ names.}
 
 \item{guess_integer}{If \code{TRUE}, guess integer types for whole numbers, if
 \code{FALSE} guess numeric type for all numbers.}
+
+\item{guess_max}{Maximum number of data rows to use for guessing column types.}
 
 \item{verbose}{whether to print messages}
 }

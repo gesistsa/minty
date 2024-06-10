@@ -27,7 +27,7 @@
 #' df <- data.frame(x = c("NA", "10"), stringsAsFactors = FALSE)
 #' str(type_convert(df))
 type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
-                         locale = default_locale(), guess_integer = FALSE,
+                         locale = default_locale(), guess_integer = FALSE, guess_max = NA,
                          verbose = FALSE) {
     stopifnot(is.data.frame(df))
     is_character <- vapply(df, is.character, logical(1))
@@ -45,7 +45,8 @@ type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
         guess_parser,
         locale = locale,
         na = na,
-        guess_integer = guess_integer
+        guess_integer = guess_integer,
+        guess_max = guess_max
     )
 
     specs <- col_spec_standardise(

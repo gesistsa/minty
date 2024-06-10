@@ -11,6 +11,7 @@ parse_guess(
   locale = default_locale(),
   trim_ws = TRUE,
   guess_integer = FALSE,
+  guess_max = 1000,
   .return_problems = FALSE
 )
 
@@ -33,6 +34,8 @@ each field before parsing it?}
 
 \item{guess_integer}{If \code{TRUE}, guess integer types for whole numbers, if
 \code{FALSE} guess numeric type for all numbers.}
+
+\item{guess_max}{Maximum number of data rows to use for guessing column types.}
 
 \item{.return_problems}{Whether to hide the \code{problems} tibble from the output}
 }
