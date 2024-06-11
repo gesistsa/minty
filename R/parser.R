@@ -174,7 +174,6 @@ col_number <- function() {
     collector("number")
 }
 
-
 #' Parse using the "best" type
 #'
 #' `parse_guess()` returns the parser vector. This function uses a number of heuristics
@@ -203,7 +202,8 @@ col_number <- function() {
 #' # ISO 8601 date times
 #' parse_guess(c("2010-10-10"))
 parse_guess <- function(x, na = c("", "NA"), locale = default_locale(), trim_ws = TRUE, guess_integer = FALSE, guess_max = NA, .return_problems = FALSE) {
-    parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na, guess_max = guess_max), na = na, locale = locale, trim_ws = trim_ws,
+    parse_vector(x, guess_parser(x, locale, guess_integer = guess_integer, na = na, guess_max = guess_max, trim_ws = trim_ws),
+                 na = na, locale = locale, trim_ws = trim_ws,
                  .return_problems = .return_problems)
 }
 
@@ -213,7 +213,7 @@ col_guess <- function() {
     collector("guess")
 }
 
-guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA"), guess_max = 1000) {
+guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na = c("", "NA"), guess_max = 1000, trim_ws = FALSE) {
     x[x %in% na] <- NA_character_
     stopifnot(is.locale(locale))
     if (is.na(guess_max)) {
@@ -223,7 +223,7 @@ guess_parser <- function(x, locale = default_locale(), guess_integer = FALSE, na
     if (abs(guess_max) == Inf || is.nan(guess_max) || guess_max < 1 || is.na(guess_max)) {
         guess_max <- length(x)
     }
-    collectorGuess(x, locale, guessInteger = guess_integer, as.integer(guess_max))
+    collectorGuess(x, locale, guessInteger = guess_integer, as.integer(guess_max), trim_ws)
 }
 
 #' Parse factors

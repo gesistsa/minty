@@ -81,4 +81,11 @@ inline bool starts_with_comment(
   return true;
 }
 
+inline std::string trimString(std::string const &str, std::string const &whitespace=" \r\n\t\v\f") {
+  auto start = str.find_first_not_of(whitespace);
+  auto end = str.find_last_not_of(whitespace);
+
+  return str.substr(start, end - start + 1);
+}
+
 #endif

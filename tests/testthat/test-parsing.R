@@ -16,3 +16,11 @@ test_that("parse_guess() guess_max", {
     expect_equal(class(parse_guess(c("1", "2", "abc"), guess_max = 2)), "numeric")
     expect_equal(class(parse_guess(c("1", "2", "abc"), guess_max = 3)), "character")
 })
+
+test_that("parse_guess() trim_ws #32 or tidyverse/readr#1536", {
+    expect_equal(parse_guess(c(" 1", "2 ", " 3 "), trim_ws = TRUE), c(1, 2, 3))
+    expect_equal(parse_guess(c(" 1", "2 ", " 3 "), trim_ws = FALSE), c(" 1", "2 ", " 3 "))
+    ## exclusive leading and trim_ws = FALSE, won't be parsed as numeric
+    expect_equal(parse_guess(c(" 1", "   2", "     3"), trim_ws = FALSE), c(" 1", "   2", "     3"))
+    expect_equal(parse_guess(c(" TRUE", "FALSE ", " T "), trim_ws = TRUE), c(TRUE, FALSE, TRUE))
+})
