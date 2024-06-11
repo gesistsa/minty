@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="index.html">minty</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,8 @@
 <!-- badges: start -->
 
 <p><code>minty</code> (<strong>Min</strong>imal <strong>ty</strong>pe guesser) is a package with the type inferencing and parsing tools (the so-called 1e parsing engine) extracted from <code>readr</code> (with permission, see this issue <a href="https://github.com/tidyverse/readr/issues/1517" class="external-link">tidyverse/readr#1517</a>). Since July 2021, these tools are not used internally by <code>readr</code> for parsing text files. Now <code>vroom</code> is used by default, unless explicitly call the first edition parsing engine (see the explanation on <a href="https://github.com/tidyverse/readr?tab=readme-ov-file#editions" class="external-link">editions</a>).</p>
-<p><code>readr</code>’s 1e type inferencing and parsing tools are used by various R packages, e.g. <code>readODS</code> and <code>surveytoolbox</code> for parsing in-memory objects, but those packages do not use the main functions (e.g. <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code>) of <code>readr</code>. As explained in the README of <code>readr</code>, those 1e code will be eventually removed from <code>readr</code>. <code>minty</code> aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages.</p>
+<p><code>readr</code>’s 1e type inferencing and parsing tools are used by various R packages, e.g. <code>readODS</code> and <code>surveytoolbox</code> for parsing in-memory objects, but those packages do not use the main functions (e.g. <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code>) of <code>readr</code>. As explained in the README of <code>readr</code>, those 1e code will be eventually removed from <code>readr</code>.</p>
+<p><code>minty</code> aims at providing a set of minimal, long-term, and compatible type inferencing and parsing tools for those packages. You might consider <code>minty</code> to be 1.5e parsing engine.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -242,6 +243,30 @@
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_guess.html" class="external-link">parse_guess</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"drei"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "1"    "2"    "drei"</span></span></code></pre></div>
+<p>For <code><a href="reference/parse_guess.html">parse_guess()</a></code> and <code><a href="reference/type_convert.html">type_convert()</a></code>, <code>trim_ws</code> is considered before type guessing (the expected behavior of <code><a href="https://vroom.r-lib.org/reference/vroom.html" class="external-link">vroom::vroom()</a></code> / <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_delim()</a></code>).</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">minty</span><span class="fu">::</span><span class="fu"><a href="reference/parse_guess.html">parse_guess</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"   1"</span>, <span class="st">" 2 "</span>, <span class="st">" 3  "</span><span class="op">)</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_guess.html" class="external-link">parse_guess</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"   1"</span>, <span class="st">" 2 "</span>, <span class="st">" 3  "</span><span class="op">)</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "1" "2" "3"</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">##tidyverse/readr#1536</span></span>
+<span><span class="fu">minty</span><span class="fu">::</span><span class="fu"><a href="reference/type_convert.html">type_convert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="st">"1 "</span>, b <span class="op">=</span> <span class="st">" 2"</span><span class="op">)</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    1 obs. of  2 variables:</span></span>
+<span><span class="co">#&gt;  $ a: num 1</span></span>
+<span><span class="co">#&gt;  $ b: num 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/type_convert.html" class="external-link">type_convert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="st">"1 "</span>, b <span class="op">=</span> <span class="st">" 2"</span><span class="op">)</span>, trim_ws <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; cols(</span></span>
+<span><span class="co">#&gt;   a = col_character(),</span></span>
+<span><span class="co">#&gt;   b = col_double()</span></span>
+<span><span class="co">#&gt; )</span></span>
+<span><span class="co">#&gt; 'data.frame':    1 obs. of  2 variables:</span></span>
+<span><span class="co">#&gt;  $ a: chr "1"</span></span>
+<span><span class="co">#&gt;  $ b: num 2</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="similar-packages">Similar packages<a class="anchor" aria-label="anchor" href="#similar-packages"></a>
