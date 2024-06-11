@@ -7,7 +7,7 @@ suppressPackageStartupMessages(library(readr))
 Sys.time()
 ```
 
-    [1] "2024-06-10 13:52:45 CEST"
+    [1] "2024-06-11 11:20:48 CEST"
 
 Under 200 rows, simple
 
@@ -19,7 +19,7 @@ bench::mark(minty::type_convert(iris_chr), iterations = 10)
     # A tibble: 1 × 6
       expression                         min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                    <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 minty::type_convert(iris_chr)    387µs    410µs     2377.     702KB        0
+    1 minty::type_convert(iris_chr)    389µs    403µs     2387.     703KB        0
 
 ``` r
 bench::mark(suppressMessages(readr::type_convert(iris_chr)), iterations = 10)
@@ -28,7 +28,7 @@ bench::mark(suppressMessages(readr::type_convert(iris_chr)), iterations = 10)
     # A tibble: 1 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                          <bch:> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 suppressMessages(readr::type_conve… 2.15ms 2.21ms      365.    1.81MB        0
+    1 suppressMessages(readr::type_conve… 2.14ms  2.2ms      368.    1.81MB        0
 
 Many rows
 
@@ -43,7 +43,7 @@ bench::mark(x <- minty::type_convert(flights_chr, guess_integer = TRUE), iterati
     # A tibble: 1 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                           <bch> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 x <- minty::type_convert(flights_ch… 1.02s  1.06s     0.940     189MB     17.1
+    1 x <- minty::type_convert(flights_ch… 1.08s  1.14s     0.884     189MB     16.1
 
 ``` r
 bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer = TRUE)), iterations = 5)
@@ -55,7 +55,7 @@ bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer
     # A tibble: 1 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                           <bch> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 y <- suppressMessages(readr::type_c… 1.01s  1.04s     0.954     153MB     17.2
+    1 y <- suppressMessages(readr::type_c… 995ms  1.02s     0.973     153MB     17.5
 
 ``` r
 all.equal(x, y)
@@ -75,7 +75,7 @@ bench::mark(x <- minty::type_convert(flights_chr, guess_integer = TRUE, guess_ma
     # A tibble: 1 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                           <bch> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 x <- minty::type_convert(flights_ch… 529ms  535ms      1.84     153MB     19.9
+    1 x <- minty::type_convert(flights_ch… 534ms  538ms      1.83     153MB     19.7
 
 ``` r
 bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer = TRUE)), iterations = 5)
@@ -87,7 +87,7 @@ bench::mark(y <- suppressMessages(readr::type_convert(flights_chr, guess_integer
     # A tibble: 1 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                           <bch> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 y <- suppressMessages(readr::type_c… 1.02s  1.02s     0.959     153MB     17.5
+    1 y <- suppressMessages(readr::type_c…    1s  1.02s     0.974     153MB     17.7
 
 ``` r
 all.equal(x, y)

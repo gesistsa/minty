@@ -23,9 +23,11 @@ call the first edition parsing engine (see the explanation on
 packages, e.g. `readODS` and `surveytoolbox` for parsing in-memory
 objects, but those packages do not use the main functions
 (e.g. `readr::read_delim()`) of `readr`. As explained in the README of
-`readr`, those 1e code will be eventually removed from `readr`. `minty`
-aims at providing a set of minimal, long-term, and compatible type
-inferencing and parsing tools for those packages.
+`readr`, those 1e code will be eventually removed from `readr`.
+
+`minty` aims at providing a set of minimal, long-term, and compatible
+type inferencing and parsing tools for those packages. You might
+consider `minty` to be 1.5e parsing engine.
 
 ## Installation
 
@@ -244,6 +246,41 @@ minty::parse_guess(c("1", "2", "drei"), guess_max = 2)
 ``` r
 readr::parse_guess(c("1", "2", "drei"))
 #> [1] "1"    "2"    "drei"
+```
+
+For `parse_guess()` and `type_convert()`, `trim_ws` is considered before
+type guessing (the expected behavior of `vroom::vroom()` /
+`readr::read_delim()`).
+
+``` r
+minty::parse_guess(c("   1", " 2 ", " 3  "), trim_ws = TRUE)
+#> [1] 1 2 3
+```
+
+``` r
+readr::parse_guess(c("   1", " 2 ", " 3  "), trim_ws = TRUE)
+#> [1] "1" "2" "3"
+```
+
+``` r
+##tidyverse/readr#1536
+minty::type_convert(data.frame(a = "1 ", b = " 2"), trim_ws = TRUE) |> str()
+#> 'data.frame':    1 obs. of  2 variables:
+#>  $ a: num 1
+#>  $ b: num 2
+```
+
+``` r
+readr::type_convert(data.frame(a = "1 ", b = " 2"), trim_ws = TRUE) |> str()
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
+#> cols(
+#>   a = col_character(),
+#>   b = col_double()
+#> )
+#> 'data.frame':    1 obs. of  2 variables:
+#>  $ a: chr "1"
+#>  $ b: num 2
 ```
 
 ## Similar packages

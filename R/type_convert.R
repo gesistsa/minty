@@ -46,7 +46,8 @@ type_convert <- function(df, col_types = NULL, na = c("", "NA"), trim_ws = TRUE,
         locale = locale,
         na = na,
         guess_integer = guess_integer,
-        guess_max = guess_max
+        guess_max = guess_max,
+        trim_ws = trim_ws
     )
 
     specs <- col_spec_standardise(

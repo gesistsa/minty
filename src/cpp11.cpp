@@ -6,10 +6,10 @@
 #include <R_ext/Visibility.h>
 
 // CollectorGuess.cpp
-std::string collectorGuess(const cpp11::strings& input, const cpp11::list& locale_, bool guessInteger, unsigned int guess_max);
-extern "C" SEXP _minty_collectorGuess(SEXP input, SEXP locale_, SEXP guessInteger, SEXP guess_max) {
+std::string collectorGuess(const cpp11::strings& input, const cpp11::list& locale_, bool guessInteger, unsigned int guess_max, bool trim_ws);
+extern "C" SEXP _minty_collectorGuess(SEXP input, SEXP locale_, SEXP guessInteger, SEXP guess_max, SEXP trim_ws) {
   BEGIN_CPP11
-    return cpp11::as_sexp(collectorGuess(cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(input), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_), cpp11::as_cpp<cpp11::decay_t<bool>>(guessInteger), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(guess_max)));
+    return cpp11::as_sexp(collectorGuess(cpp11::as_cpp<cpp11::decay_t<const cpp11::strings&>>(input), cpp11::as_cpp<cpp11::decay_t<const cpp11::list&>>(locale_), cpp11::as_cpp<cpp11::decay_t<bool>>(guessInteger), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(guess_max), cpp11::as_cpp<cpp11::decay_t<bool>>(trim_ws)));
   END_CPP11
 }
 // parse.cpp
@@ -36,7 +36,7 @@ extern "C" SEXP _minty_r_is_string_cpp11(SEXP x) {
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_minty_collectorGuess",    (DL_FUNC) &_minty_collectorGuess,    4},
+    {"_minty_collectorGuess",    (DL_FUNC) &_minty_collectorGuess,    5},
     {"_minty_parse_vector_",     (DL_FUNC) &_minty_parse_vector_,     5},
     {"_minty_r_is_string_cpp11", (DL_FUNC) &_minty_r_is_string_cpp11, 1},
     {"_minty_type_convert_col",  (DL_FUNC) &_minty_type_convert_col,  6},
