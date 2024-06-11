@@ -77,6 +77,15 @@ test_that("skip behaviors, readr#1509 or minty#20", {
     expect_error(minty::type_convert(text_only, col_types = list("-", "-")), NA)
 })
 
+test_that("type_convert() trim_ws #32 or tidyverse/readr#1536", {
+    ## integration of guess_parse in type_convert()
+    x <- type_convert(data.frame(a = c("1 ", "  1"), b = c(" 2", "    2")), trim_ws = TRUE)
+    expect_equal(class(x$a), "numeric")
+    expect_equal(class(x$b), "numeric")
+    x <- type_convert(data.frame(a = c("  1")), trim_ws = FALSE)
+    expect_equal(class(x$a), "character")
+})
+
 test_that("r_is_string_cpp11", {
     expect_true(r_is_string_cpp11("a"))
     expect_true(r_is_string_cpp11(c("a")))

@@ -20,9 +20,7 @@ test_that("parse_guess() guess_max", {
 test_that("parse_guess() trim_ws #32 or tidyverse/readr#1536", {
     expect_equal(parse_guess(c(" 1", "2 ", " 3 "), trim_ws = TRUE), c(1, 2, 3))
     expect_equal(parse_guess(c(" 1", "2 ", " 3 "), trim_ws = FALSE), c(" 1", "2 ", " 3 "))
+    ## exclusive leading and trim_ws = FALSE, won't be parsed as numeric
+    expect_equal(parse_guess(c(" 1", "   2", "     3"), trim_ws = FALSE), c(" 1", "   2", "     3"))
     expect_equal(parse_guess(c(" TRUE", "FALSE ", " T "), trim_ws = TRUE), c(TRUE, FALSE, TRUE))
-    ## integration in type_convert()
-    x <- type_convert(data.frame(a = c("1 ", "  1"), b = c(" 2", "    2")), trim_ws = TRUE)
-    expect_equal(class(x$a), "numeric")
-    expect_equal(class(x$b), "numeric")
 })
