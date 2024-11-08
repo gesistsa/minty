@@ -7,7 +7,7 @@ suppressPackageStartupMessages(library(readr))
 Sys.time()
 ```
 
-    [1] "2024-11-08 10:42:18 CET"
+    [1] "2024-11-08 11:32:50 CET"
 
 Under 200 rows, simple
 
@@ -21,8 +21,8 @@ bench::mark(minty::type_convert(iris_chr),
     # A tibble: 2 × 6
       expression                           min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                      <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 minty::type_convert(iris_chr)   419.37µs  464.8µs     2105.  702.53KB        0
-    2 suppressMessages(readr::type_c…   2.24ms   2.26ms      357.    1.97MB        0
+    1 minty::type_convert(iris_chr)    417.2µs 483.39µs     2020.  702.53KB        0
+    2 suppressMessages(readr::type_c…   2.23ms   2.34ms      345.    1.97MB        0
 
 Many rows
 
@@ -39,8 +39,8 @@ bench::mark(minty::type_convert(flights_chr, guess_integer = TRUE),
     # A tibble: 2 × 6
       expression                             min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                           <bch> <bch:>     <dbl> <bch:byt>    <dbl>
-    1 minty::type_convert(flights_chr, gu… 1.15s  1.19s     0.840     189MB     15.4
-    2 suppressMessages(readr::type_conver… 1.05s  1.06s     0.924     153MB     17.0
+    1 minty::type_convert(flights_chr, gu… 1.14s  1.19s     0.842     189MB     15.5
+    2 suppressMessages(readr::type_conver… 1.06s  1.06s     0.918     153MB     16.9
 
 Many row, guess_max
 
@@ -56,8 +56,8 @@ bench::mark(minty::type_convert(flights_chr, guess_integer = TRUE, guess_max = 5
     # A tibble: 2 × 6
       expression                           min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr>                      <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 minty::type_convert(flights_ch… 574.35ms 581.84ms     1.67      153MB     18.4
-    2 suppressMessages(readr::type_c…    1.06s    1.11s     0.916     153MB     16.7
+    1 minty::type_convert(flights_ch… 552.31ms 559.35ms     1.73      153MB     19.0
+    2 suppressMessages(readr::type_c…    1.07s    1.12s     0.909     153MB     16.5
 
 ``` r
 sessionInfo()
