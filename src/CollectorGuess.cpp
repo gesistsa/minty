@@ -33,10 +33,16 @@ bool canParse(const cpp11::strings& x, const canParseFun& canParseF, LocaleInfo*
   return true;
 }
 
-bool allMissing(const cpp11::strings& x) {
+bool allMissing(const cpp11::strings& x, bool trim_ws) {
   for (const auto & i : x) {
-    if (i != NA_STRING && i.size() > 0) {
+    if (!trim_ws && i != NA_STRING && i.size() > 0) {
       return false;
+    }
+    if (trim_ws) {
+      auto istr = trimString(std::string(i));
+      if (i != NA_STRING && istr != "") {
+        return false;
+      }
     }
   }
   return true;
@@ -136,7 +142,7 @@ static bool isDateTime(const std::string& x, LocaleInfo* pLocale) {
     return "character";
   }
 
-  if (allMissing(input)) {
+  if (allMissing(input, trim_ws)) {
     return "logical";
   }
 
