@@ -24,3 +24,13 @@ test_that("parse_guess() trim_ws #32 or tidyverse/readr#1536", {
     expect_equal(parse_guess(c(" 1", "   2", "     3"), trim_ws = FALSE), c(" 1", "   2", "     3"))
     expect_equal(parse_guess(c(" TRUE", "FALSE ", " T "), trim_ws = TRUE), c(TRUE, FALSE, TRUE))
 })
+
+test_that("all empty with trim_ws won't crash, #37 and ropensci/readODS#211", {
+    expect_error(minty:::guess_parser(c(" ", "     "), trim_ws = TRUE), NA)
+    expect_error(minty:::guess_parser(c(" "), trim_ws = TRUE), NA)
+    expect_equal(minty:::guess_parser(c(" "), trim_ws = TRUE), "logical")
+    expect_equal(minty:::guess_parser(c(" ", "   "), trim_ws = TRUE), "logical")
+    expect_error(minty:::guess_parser(c(" "), trim_ws = FALSE), NA)
+    expect_error(minty:::guess_parser(c(" ", "a"), trim_ws = FALSE), NA)
+    expect_equal(minty:::guess_parser(c(" ", "a")), "character")
+})

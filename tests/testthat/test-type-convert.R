@@ -98,3 +98,15 @@ test_that("r_is_string_cpp11", {
     expect_false(r_is_string_cpp11(NA_character_))
     expect_false(r_is_string_cpp11(NULL))
 })
+
+test_that("integration tests for #37, also ropensci/readODS#211", {
+    input <- structure(list(picture_archive_url = c("", "", "", "", ""),
+                            video_url = c(" ", " ", " ", " ", " ")),
+                       row.names = c(NA, -5L), class = "data.frame")
+
+    expect_error(type_convert(input, trim_ws = TRUE), NA)
+    output <- type_convert(input, trim_ws = TRUE)
+    expect_true(is.logical(output$video_url))
+    output <- type_convert(input, trim_ws = FALSE)
+    expect_false(is.logical(output$video_url))
+})
