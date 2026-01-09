@@ -13,8 +13,8 @@ Authors@R: c(
     )
 Description: Port the type guesser from 'readr' (so-called 'readr' first edition parsing engine, now superseded by 'vroom').
 License: MIT + file LICENSE
-URL: https://gesistsa.github.io/minty/, https://github.com/gesistsa/minty
-BugReports: https://github.com/gesistsa/minty/issues
+URL: https://gesistsa.github.io/minty/, https://codeberg.org/chainsawriot/minty
+BugReports: https://codeberg.org/chainsawriot/minty/issues
 Depends:
     R (>= 4.0)
 LinkingTo: 

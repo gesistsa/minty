@@ -5,7 +5,6 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gesistsa/minty/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/minty)](https://CRAN.R-project.org/package=minty)
 <!-- badges: end -->
@@ -34,10 +33,10 @@ consider `minty` to be 1.5e parsing engine.
 You can install the development version of minty like so:
 
 ``` r
-if (!require("remotes")){
-    install.packages("remotes")
+if (!require("pak")){
+    install.packages("pak")
 }
-remotes::install_github("gesistsa/minty")
+pak::pak("git::https://codeberg.org/chainsawriot/minty")
 ```
 
 ## Example
