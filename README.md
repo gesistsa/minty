@@ -188,8 +188,7 @@ data <- minty::type_convert(text_only, verbose = TRUE)
 #> cols(  maybe_age = col_character(),  maybe_male = col_logical(),  maybe_name = col_character(),  some_na = col_character(),  dob = col_date(format = ""))
 ```
 
-At the moment, `minty` does not use [the `problems`
-mechanism](https://vroom.r-lib.org/reference/problems.html) by default.
+At the moment, `minty` does not use the `problems` mechanism by default.
 
 ``` r
 minty::parse_logical(c("true", "fake", "IDK"), na = "IDK")
