@@ -1,6 +1,6 @@
 Package: minty
 Title: Minimal Type Guesser
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: c(
     person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com", comment = c(ORCID = "0000-0002-6232-7530")),
     person("Hadley", "Wickham", , "hadley@posit.co", role = "aut", comment = "author of the ported code from readr"),
@@ -18,7 +18,7 @@ BugReports: https://codeberg.org/chainsawriot/minty/issues
 Depends:
     R (>= 4.0)
 LinkingTo: 
-    cpp11 (>= 0.5.2),
+    cpp11 (>= 0.5.3),
     tzdb (>= 0.5.0)
 Config/testthat/edition: 3
 Config/testthat/parallel: false
